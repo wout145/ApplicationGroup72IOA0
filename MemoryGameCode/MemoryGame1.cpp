@@ -1,5 +1,3 @@
-// Arduino code for Memory Game 1
-
 #define LED1 8
 #define LED2 9
 #define LED3 10
@@ -81,6 +79,8 @@ void askForSequenceLength() {
  
   int response;
   
+  delay(10);
+
   Serial.println("Please enter a sequence length (0-10)");
   while(Serial.available() > 0) {
     Serial.read();
@@ -181,10 +181,7 @@ void askForAnotherRound() {
       } else if (response == 'n' || response == 'N') {
         Serial.println("Game Over");
         while(true);
-      } else {
-        Serial.println("Please enter a valid response.");
-        askForAnotherRound();
-      }
+      } 
     }
   }
   
