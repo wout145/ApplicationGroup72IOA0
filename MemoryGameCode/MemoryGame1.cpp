@@ -1,3 +1,5 @@
+// Arduino code for memory game 1
+
 #define LED1 8
 #define LED2 9
 #define LED3 10
@@ -26,6 +28,7 @@ void setup() {
   }
   
   Serial.begin(9600);
+  randomSeed(analogRead(0));
   
   askForSequenceLength();
   

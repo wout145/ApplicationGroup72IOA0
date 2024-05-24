@@ -1,3 +1,5 @@
+// Arduino code for memory game 2
+
 #define LED1 8
 #define LED2 9
 #define LED3 10
@@ -15,7 +17,7 @@ int ledSequence[maxSequenceLength];
 bool buttonPressed[4] = {false, false, false, false};
 int currentPress = 0;
 bool gameStarted = false;
-int sequenceLength = 0;
+int sequenceLength;
 int wrongLedSequence;
 
 void setup() {
@@ -28,32 +30,55 @@ void setup() {
   
   Serial.begin(9600);
   randomSeed(analogRead(0));
+
+  askForSequenceLength();
   
 }
 
 void loop() {
-  askForSequenceLength();
-  getButtonSequence();
-  showButtonSequence();
-  createLedSequence();
-  delay(500);
-  showLedSequence();
-  waitForUserResponse();
+
+  if (Serial.available() > 0) {
+    sequenceLength = Serial.parseInt();
+    if (sequenceLength > 0 && sequenceLength <= maxSequenceLength) {
+      Serial.print("You entered: ");
+      Serial.println(sequenceLength);
+      gameStarted = true;
+    } else {
+      Serial.println("Invalid Sequence Length");
+      askForSequenceLength();
+    }
+
+    if (gameStarted) {
+      getButtonSequence();
+      showButtonSequence();
+      createLedSequence();
+      delay(500);
+      showLedSequence();
+      waitForUserResponse();}
+    
+  }
+  
   
   
 }
 
 void askForSequenceLength() {
+
+ 
+  int response;
   
-  Serial.println("Enter the length of your sequence (1-10):");
-  while (Serial.available() == 0); // Wait for input
-  sequenceLength = Serial.parseInt();
-  Serial.print("You entered: ");
-  Serial.println(sequenceLength);
+  delay(10);
+
+  Serial.println("Please enter a sequence length (0-10)");
+  while(Serial.available() > 0) {
+    Serial.read();
+  }
   
+  gameStarted = false;
 }
 
 void getButtonSequence() {
+  delay(10);
   Serial.println("Start pressing buttons to create your sequence...");
   while (currentPress < sequenceLength) {
     for (int i = 0; i < 4; i++) {
@@ -86,6 +111,9 @@ void createLedSequence() {
   if (wrongLedSequence == 1) {
     int wrongLedNr = random(0, sequenceLength);
     int wrongLedValue = random(0, 4);
+    if (userSequence[wrongLedNr] == wrongLedValue) {
+      wrongLedValue--;
+    }
 
     ledSequence[wrongLedNr] = wrongLedValue; 
   }
@@ -118,7 +146,9 @@ void blinkLed(int ledNr, int times, int duration) {
     digitalWrite(ledPins[ledNr - 1], HIGH);
     delay(duration);
     digitalWrite(ledPins[ledNr - 1], LOW);
-    delay(500);
+    if (i < times - 1) {
+      delay(500);
+      }
   }
 }
 
@@ -157,6 +187,7 @@ void waitForUserResponse() {
         for (int i = 0; i < 4; i++) {
           buttonPressed[i] = false;
         }
+        askForSequenceLength();
         break;
       } else if (response == 'n' || response == 'N') {
         Serial.println("Game Over!");
