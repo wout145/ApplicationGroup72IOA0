@@ -146,7 +146,7 @@ void blinkAllLeds(int times, int duration) {
     for (int i = 0; i < 4; i++) {
       digitalWrite(ledPins[i], LOW);
     }
-    delay(duration);
+    delay(500);
   }
   
 }
@@ -160,7 +160,7 @@ void blinkLed(int ledNr, int times, int duration) {
     digitalWrite(ledNr, HIGH);
     delay(duration);
     digitalWrite(ledNr, LOW);
-    delay(duration);
+    delay(500);
     
   }
 }
