@@ -2,6 +2,7 @@
 # Application Group 7 2IOA0
 
 This application is a web-based visual programming editor for Arduino. It is tailored towards people with ADHD and based on the existing [BlocklyDuino](https://github.com/BlocklyDuino/BlocklyDuino).
+For our web-based interface we have focused on young students diagnosed with Attention-deficit hyperactivity disorder (ADHD). To help them learn programming in this block-based environment, we have constructed a reward system, since frequent positive reinforcement has been shown to improve the motivation and performance of young students with ADHD.
 
 ### Features
 
