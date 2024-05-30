@@ -632,8 +632,10 @@
       }
 
       function clearhighscore() {
+        const highScore = document.getElementById("HighScore");
         saveHighScore(0);
-        highScoreElement.textContent = "High Score: " + score;
+        highscore = getHighScore()
+        highScore.textContent = "High Score: " + highscore;
       }
     </script>
   </body>
