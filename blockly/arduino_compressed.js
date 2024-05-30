@@ -881,7 +881,7 @@ Blockly.Arduino.variables_set = function () {
     ";\n"
   );
 };
-Blockly.Arduino.testingblock = function() {
-  var code = "";
+Blockly.Arduino.dummyBlock = function() {
+  var code = " ";
   return code;
 };

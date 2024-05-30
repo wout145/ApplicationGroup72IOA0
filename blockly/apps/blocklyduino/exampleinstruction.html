@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Light up the LED!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .container {
+            text-align: center;
+            width: 80%;
+            max-width: 1000px;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .definition {
+            border: 2px solid black;
+            padding: 20px;
+            margin-bottom: 20px;
+            width: calc(100% - 40px);
+            box-sizing: border-box;
+            background-color: transparent;
+        }
+        .instructions {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .instruction {
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            width: 30%;
+            box-sizing: border-box;
+        }
+        .instruction h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .instruction img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .arrow {
+            font-size: 10em; 
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Changing the maximum length of the sequence</h1>
+    <div class="definition">
+        <p>The maximum sequence length is a variable in the code which takes an integer value (a whole number). This variable is used in the code to determine the maximum length that the sequence can have. The sequence is the order in which the LED lights light up. By changing the value of this variable, the sequence has the possibility to be longer or shorter. If you increase the maximum sequence length, the sequence can be longer. If you decrease the maximum sequence length, the sequence can be shorter.</p>
+    </div>
+    <div class="instructions">
+        <div class="instruction">
+            <h2>1. Find this block</h2>
+            <img src="blocks.jpg" alt="Drag this block">
+        </div>
+        <div class="arrow">➡</div> <!-- Arrow emoji adjusted -->
+        <div class="instruction" onclick="toggleGif()">
+            <h2>2. Change the value as follows:</h2>
+            <img id="exampleGif" src="blocksgif.gif" alt="It lights up">
+        </div>
+    </div>
+   
+</div>
+</body>
+</html>

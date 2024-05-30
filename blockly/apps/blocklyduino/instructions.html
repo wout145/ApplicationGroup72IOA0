@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instructions</title>
+    <style>
+      @font-face {
+        font-family: "tinypixel";
+        src: url("tinypixel.woff") format("woff");
+      }
+
+      body {
+        font-family: "tinypixel", sans-serif;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .instructions {
+        font-family: "tinypixel", sans-serif;
+        font-size: 36px;
+        margin-top: 50px;
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      .chapter-title {
+        font-size: 18px;
+        margin-bottom: 10px;
+        text-align: center;
+        cursor: pointer;
+        color: black;
+        transition: color 0.3s, transform 0.3s;
+      }
+
+      .chapter-title:hover {
+        color: #0056b3;
+        transform: scale(1.05);
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%; 
+      }
+
+      li {
+        width: 100%; 
+        max-width: 600px; 
+        margin: 10px 0;
+        display: flex;
+        justify-content: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+        transition: transform 0.3s;
+      }
+
+      .list-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+    </style>
+    <script>
+      function openExampleInstruction() {
+        window.open("exampleinstruction.html", "_blank");
+      }
+    </script>
+  </head>
+  <body>
+    <div class="instructions">INSTRUCTIONS</div>
+    <div class="list-container">
+      <ul>
+        <li onclick="openExampleInstruction();">
+          <div class="chapter-title">Change maximum sequence length</div>
+        </li>
+        <li onclick="location.href='chapter2.html';">
+          <div class="chapter-title">Change speed of sequence</div>
+        </li>
+        <li onclick="location.href='chapter3.html';">
+          <div class="chapter-title">Change the feedback sequence</div>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>

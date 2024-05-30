@@ -3055,14 +3055,14 @@ Blockly.Blocks.variables_set = {
   customContextMenu: Blockly.Blocks.variables_get.customContextMenu,
 };
 
-Blockly.Blocks['testingblock'] = {
+Blockly.Blocks['dummyBlock'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("TestingBlock");
+        .appendField("Rest of code");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(230);
- this.setTooltip("This is a tooltip");
- this.setHelpUrl("no");
+ this.setTooltip("Dummy Block");
+ this.setHelpUrl("");
   }
 };
