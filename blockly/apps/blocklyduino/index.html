@@ -1,6 +1,6 @@
-<html manifest="node.manifest">
+  <html manifest=node.manifest>
   <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <title>BlocklyDuino</title>
     <script type="text/javascript" src="../../blockly_compressed.js"></script>
     <script type="text/javascript" src="../../blocks_compressed.js"></script>
@@ -11,224 +11,329 @@
     <script type="text/javascript" src="FileSaver.min.js"></script>
     <script type="text/javascript" src="blockly_helper.js"></script>
     <script>
-      function openInstructions() {
-        window.open("instructions.html", "_blank");
-      }
+        // Function to open the modal
+
+        var modalToggled = false;
+
+        function toggleModal() {
+
+          var modal = document.getElementById('helpModal');
+
+
+          if (!modalToggled) {
+            modal.style.display = 'block';
+            modalToggled = true;
+            document.getElementById('closeButton').addEventListener('click', toggleModal);
+
+        // Event listeners for the blue container
+        document.querySelector('.bluecontainer').addEventListener('mouseenter', () => showArrow('arrowblue'));
+        document.querySelector('.bluecontainer').addEventListener('mouseleave', function() {
+            hideArrow('arrowblue');
+        });
+      
+        // Event listeners for the green container
+        document.querySelector('.greencontainer').addEventListener('mouseenter', function() {
+            showArrow('arrowgreen');
+        });
+        document.querySelector('.greencontainer').addEventListener('mouseleave', function() {
+            hideArrow('arrowgreen');
+        });
+      
+        // Event listeners for the pink container
+        document.querySelector('.pinkcontainer').addEventListener('mouseenter', function() {
+            showArrow('arrowpink');
+        });
+        document.querySelector('.pinkcontainer').addEventListener('mouseleave', function() {
+            hideArrow('arrowpink');
+        });
+          } else {
+            document.getElementById('helpModal').style.display = 'none';
+            modalToggled = false;
+
+        // Event listeners for the blue container
+        document.querySelector('.bluecontainer').removeEventListener('mouseenter', () => showArrow('arrowblue'));
+        document.querySelector('.bluecontainer').removeEventListener('mouseleave', function() {
+            hideArrow('arrowblue');
+        });
+      
+        // Event listeners for the green container
+        document.querySelector('.greencontainer').removeEventListener('mouseenter', function() {
+            showArrow('arrowgreen');
+        });
+        document.querySelector('.greencontainer').removeEventListener('mouseleave', function() {
+            hideArrow('arrowgreen');
+        });
+      
+        // Event listeners for the pink container
+        document.querySelector('.pinkcontainer').removeEventListener('mouseenter', function() {
+            showArrow('arrowpink');
+        });
+        document.querySelector('.pinkcontainer').removeEventListener('mouseleave', function() {
+            hideArrow('arrowpink');
+        });
+          }
+        }
+      
+      
+        // Function to show the arrow
+        function showArrow(arrowId) {
+            document.getElementById(arrowId).style.display = 'block';
+        }
+      
+        // Function to hide the arrow
+        function hideArrow(arrowId) {
+            document.getElementById(arrowId).style.display = 'none';
+        }
+      
     </script>
 
     <script>
-      /**
-       * List of tab names.
-       * @private
-       */
-      var TABS_ = ["blocks", "arduino", "xml"];
 
-      var selected = "blocks";
+  /**
+   * List of tab names.
+   * @private
+   */
+  var TABS_ = ['blocks', 'arduino', 'xml']; 
 
-      /**
-       * Switch the visible pane when a tab is clicked.
-       * @param {string} clickedName Name of tab clicked.
-       */
-      function tabClick(clickedName) {
-        // If the XML tab was open, save and render the content.
-        if (document.getElementById("tab_xml").className == "tabon") {
-          var xmlTextarea = document.getElementById("content_xml");
-          var xmlText = xmlTextarea.value;
-          var xmlDom = null;
-          try {
-            xmlDom = Blockly.Xml.textToDom(xmlText);
-          } catch (e) {
-            var q = window.confirm(
-              "Error parsing XML:\n" + e + "\n\nAbandon changes?"
-            );
-            if (!q) {
-              // Leave the user on the XML tab.
-              return;
-            }
-          }
-          if (xmlDom) {
-            Blockly.mainWorkspace.clear();
-            Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
-          }
-        }
+  var selected = 'blocks';
 
-        if (document.getElementById("tab_blocks").className == "tabon") {
-          Blockly.mainWorkspace.setVisible(false);
-        }
-        // Deselect all tabs and hide all panes.
-        for (var i = 0; i < TABS_.length; i++) {
-          var name = TABS_[i];
-          document.getElementById("tab_" + name).className = "taboff";
-          document.getElementById("content_" + name).style.visibility =
-            "hidden";
-        }
+  var block_dragged = false;
 
-        // Select the active tab.
-        selected = clickedName;
-        document.getElementById("tab_" + clickedName).className = "tabon";
-        // Show the selected pane.
-        document.getElementById("content_" + clickedName).style.visibility =
-          "visible";
-        renderContent();
-        if (clickedName == "blocks") {
-          Blockly.mainWorkspace.setVisible(true);
-        }
-        Blockly.fireUiEvent(window, "resize");
-      }
-
-      /**
-       * Populate the currently selected pane with content generated from the blocks.
-       */
-      function renderContent() {
-        var content = document.getElementById("content_" + selected);
-        // Initialize the pane.
-        if (content.id == "content_blocks") {
-          // If the workspace was changed by the XML tab, Firefox will have performed
-          // an incomplete rendering due to Blockly being invisible.  Rerender.
-          Blockly.mainWorkspace.render();
-        } else if (content.id == "content_xml") {
-          var xmlTextarea = document.getElementById("content_xml");
-          var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-          var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
-          xmlTextarea.value = xmlText;
-          xmlTextarea.focus();
-          /*} else if (content.id == 'content_javascript') {
-    content.innerHTML = Blockly.JavaScript.workspaceToCode();
-  } else if (content.id == 'content_dart') {
-    content.innerHTML = Blockly.Dart.workspaceToCode();
-  } else if (content.id == 'content_python') {
-    content.innerHTML = Blockly.Python.workspaceToCode();*/
-        } else if (content.id == "content_arduino") {
-          //content.innerHTML = Blockly.Arduino.workspaceToCode();
-          var arduinoTextarea = document.getElementById("content_arduino");
-          arduinoTextarea.value = Blockly.Arduino.workspaceToCode();
-          arduinoTextarea.focus();
+  /**
+   * Switch the visible pane when a tab is clicked.
+   * @param {string} clickedName Name of tab clicked.
+   */
+  function tabClick(clickedName) {
+    // If the XML tab was open, save and render the content.
+    if (document.getElementById('tab_xml').className == 'tabon') {
+      var xmlTextarea = document.getElementById('content_xml');
+      var xmlText = xmlTextarea.value;
+      var xmlDom = null;
+      try {
+        xmlDom = Blockly.Xml.textToDom(xmlText);
+      } catch (e) {
+        var q =
+            window.confirm('Error parsing XML:\n' + e + '\n\nAbandon changes?');
+        if (!q) {
+          // Leave the user on the XML tab.
+          return;
         }
       }
-
-      /**
-       * Compute the absolute coordinates and dimensions of an HTML element.
-       * @param {!Element} element Element to match.
-       * @return {!Object} Contains height, width, x, and y properties.
-       * @private
-       */
-      function getBBox_(element) {
-        var height = element.offsetHeight;
-        var width = element.offsetWidth;
-        var x = 0;
-        var y = 0;
-        do {
-          x += element.offsetLeft;
-          y += element.offsetTop;
-          element = element.offsetParent;
-        } while (element);
-        return {
-          height: height,
-          width: width,
-          x: x,
-          y: y,
-        };
+      if (xmlDom) {
+        Blockly.mainWorkspace.clear();
+        Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
       }
-      function saveHighScore(score) {
-        localStorage.setItem("highScore", score);
-      }
+    }
 
-      // Retrieve high score from localStorage
-      function getHighScore() {
-        return localStorage.getItem("highScore") || 0;
-      }
-      /**
-       * Initialize Blockly.  Called on page load.
-       */
-      function init() {
-        //window.onbeforeunload = function() {
-        //  return 'Leaving this page will result in the loss of your work.';
-        //};
+    if (document.getElementById('tab_blocks').className == 'tabon') {
+      Blockly.mainWorkspace.setVisible(false);
+    }
+    // Deselect all tabs and hide all panes.
+    for (var i = 0; i < TABS_.length; i++) {
+      var name = TABS_[i];
+      document.getElementById('tab_' + name).className = 'taboff';
+      document.getElementById('content_' + name).style.visibility = 'hidden';
+    }
 
-        var container = document.getElementById("content_area");
-        var HighScore = document.getElementById("HighScore");
-        HighScore.textContent = "High Score: " + getHighScore();
-        var onresize = function (e) {
-          var bBox = getBBox_(container);
-          for (var i = 0; i < TABS_.length; i++) {
-            var el = document.getElementById("content_" + TABS_[i]);
-            el.style.top = bBox.y + "px";
-            el.style.left = bBox.x + "px";
-            // Height and width need to be set, read back, then set again to
-            // compensate for scrollbars.
-            el.style.height = bBox.height + "px";
-            el.style.height = 2 * bBox.height - el.offsetHeight + "px";
-            el.style.width = bBox.width + "px";
-            el.style.width = 2 * bBox.width - el.offsetWidth + "px";
-          }
-          // Make the 'Blocks' tab line up with the toolbox.
-          if (Blockly.mainWorkspace.toolbox_.width) {
-            document.getElementById("tab_blocks").style.minWidth =
-              Blockly.mainWorkspace.toolbox_.width - 38 + "px";
+  // Select the active tab.
+    selected = clickedName;
+    document.getElementById('tab_' + clickedName).className = 'tabon';
+    // Show the selected pane.
+    document.getElementById('content_' + clickedName).style.visibility =
+        'visible';
+    renderContent();
+    if (clickedName == 'blocks') {
+      Blockly.mainWorkspace.setVisible(true);
+    }
+    Blockly.fireUiEvent(window, 'resize');
+  }
+
+  /**
+   * Populate the currently selected pane with content generated from the blocks.
+   */
+  function renderContent() {
+    var content = document.getElementById('content_' + selected);
+    // Initialize the pane.
+    if (content.id == 'content_blocks') {
+      // If the workspace was changed by the XML tab, Firefox will have performed
+      // an incomplete rendering due to Blockly being invisible.  Rerender.
+      Blockly.mainWorkspace.render();
+    } else if (content.id == 'content_xml') {
+      var xmlTextarea = document.getElementById('content_xml');
+      var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+      var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
+      xmlTextarea.value = xmlText;
+      xmlTextarea.focus();
+    /*} else if (content.id == 'content_javascript') {
+      content.innerHTML = Blockly.JavaScript.workspaceToCode();
+    } else if (content.id == 'content_dart') {
+      content.innerHTML = Blockly.Dart.workspaceToCode();
+    } else if (content.id == 'content_python') {
+      content.innerHTML = Blockly.Python.workspaceToCode();*/
+    } else if (content.id == 'content_arduino') {
+      //content.innerHTML = Blockly.Arduino.workspaceToCode();
+      var arduinoTextarea = document.getElementById('content_arduino');
+      arduinoTextarea.value = Blockly.Arduino.workspaceToCode();
+      arduinoTextarea.focus();
+    }
+  }
+
+  /**
+   * Compute the absolute coordinates and dimensions of an HTML element.
+   * @param {!Element} element Element to match.
+   * @return {!Object} Contains height, width, x, and y properties.
+   * @private
+   */
+  function getBBox_(element) {
+    var height = element.offsetHeight;
+    var width = element.offsetWidth;
+    var x = 0;
+    var y = 0;
+    do {
+      x += element.offsetLeft;
+      y += element.offsetTop;
+      element = element.offsetParent;
+    } while (element);
+    return {
+      height: height,
+      width: width,
+      x: x,
+      y: y
+    };
+  }
+  function saveHighScore(score) {
+    localStorage.setItem('highScore', score);
+  }
+
+  // Retrieve high score from localStorage
+  function getHighScore() {
+    return localStorage.getItem('highScore') || 0;
+  }
+
+  function handleBlockDrag(event) {
+    block_dragged = true;
+    console.log('A block was dragged into the workspace!');
+  }
+
+  /**
+   * Initialize Blockly.  Called on page load.
+   */
+  function init() {
+    //window.onbeforeunload = function() {
+    //  return 'Leaving this page will result in the loss of your work.';
+    //};
+
+    var container = document.getElementById('content_area');
+    var HighScore = document.getElementById('HighScore');
+    HighScore.textContent = "High Score: " + getHighScore();
+    var onresize = function(e) {
+      var bBox = getBBox_(container);
+      for (var i = 0; i < TABS_.length; i++) {
+        var el = document.getElementById('content_' + TABS_[i]);
+        el.style.top = bBox.y + 'px';
+        el.style.left = bBox.x + 'px';
+        // Height and width need to be set, read back, then set again to
+        // compensate for scrollbars.
+        el.style.height = bBox.height + 'px';
+        el.style.height = (2 * bBox.height - el.offsetHeight) + 'px';
+        el.style.width = bBox.width + 'px';
+        el.style.width = (2 * bBox.width - el.offsetWidth) + 'px';
+      }
+      // Make the 'Blocks' tab line up with the toolbox.
+      if (Blockly.mainWorkspace.toolbox_.width) {
+        document.getElementById('tab_blocks').style.minWidth =
+            (Blockly.mainWorkspace.toolbox_.width - 38) + 'px';
             // Account for the 19 pixel margin and on each side.
-          }
-        };
-        window.addEventListener("resize", onresize, false);
-
-        var toolbox = document.getElementById("toolbox");
-        Blockly.inject(document.getElementById("content_blocks"), {
-          grid: { spacing: 25, length: 3, colour: "#ccc", snap: true },
-          media: "../../media/",
-          toolbox: toolbox,
-        });
-
-        auto_save_and_restore_blocks();
-
-        //load from url parameter (single param)
-        //http://stackoverflow.com/questions/2090551/parse-query-string-in-javascript
-        var dest = unescape(location.search.replace(/^.*\=/, "")).replace(
-          /\+/g,
-          " "
-        );
-        if (dest) {
-          load_by_url(dest);
-        }
       }
+    };
+    window.addEventListener('resize', onresize, false);
+
+    var toolbox = document.getElementById('toolbox');
+    Blockly.inject(document.getElementById('content_blocks'),
+        {grid:
+            {spacing: 25,
+            length: 3,
+            colour: '#ccc',
+            snap: true},
+        media: '../../media/',
+        toolbox: toolbox});
+
+    Blockly.getMainWorkspace().addChangeListener(handleBlockDrag);
+
+    auto_save_and_restore_blocks();
+
+    //load from url parameter (single param)
+    //http://stackoverflow.com/questions/2090551/parse-query-string-in-javascript
+    var dest = unescape(location.search.replace(/^.*\=/, '')).replace(/\+/g, " ");
+    if(dest){
+      load_by_url(dest);
+    }
+
+  }
     </script>
     <style>
-      html,
-      body {
+      html, body {
         height: 100%;
       }
       body {
-        background-color: #fff;
+        background-image: url(breinbanner.png);
+        /* background-color: rgb(176 , 216, 246); */
         font-family: sans-serif;
         margin: 0;
         overflow: hidden;
       }
       h1 {
-        font-weight: normal;
-        font-size: 140%;
+        font-weight: bold;
+        font-size: 130%;
         margin-left: 5px;
         margin-right: 5px;
+        font-family: cursive;
+        font-style: italic;
       }
       h2 {
-        font-size: 120%;
-        font-weight: normal;
+        font-size: 130%;
+        font-weight: bold;
         margin-left: 5px;
         margin-right: 5px;
+        font-family: cursive;
+        font-style: italic;
+      }
+      h5 {
+        font-size: 170%;
+        font-weight: normal;
+        color: black;
+        margin-left: 5px;
+        margin-right: 5px;
+        margin-bottom: 15px;
+        margin-top: 5px;
+        font-family: cursive;
       }
 
       /* Tabs */
-      #tabRow > td {
-        border: 1px solid #ccc;
+      #tabRow>td {
+        /* border: 1.5px solid black; */
+        padding-bottom: 5px
+      }
+      #tabRow2>td{
+        /* border: 1.5px solid black; */
+        padding-bottom: 5px
       }
       td.tabon {
         border-bottom-color: #ddd !important;
-        background-color: #ddd;
-        padding: 5px 19px;
+        background-color: rgb(87, 153, 204);
+        padding: 5px 10px;
+        font-family: cursive;
       }
       td.taboff {
         cursor: pointer;
-        padding: 5px 19px;
+        background-color: rgb(87, 153, 204);
+        padding: 5px 10px;
+        border: 0.5rem;
+        border-color: black;
+        font-family: cursive;
       }
       td.taboff:hover {
-        background-color: #eee;
+        background-color: rgb(110, 169, 215);
       }
       td.tabmin {
         border-top-style: none !important;
@@ -239,8 +344,10 @@
         border-top-style: none !important;
         border-left-style: none !important;
         border-right-style: none !important;
-        width: 99%;
-        text-align: center;
+        width: auto;
+        text-align: right;
+        padding-right: 10px
+      
       }
 
       table {
@@ -251,7 +358,8 @@
       }
       td {
         padding: 0;
-        vertical-align: top;
+        vertical-align: middle;
+        
       }
       .content {
         visibility: hidden;
@@ -276,17 +384,15 @@
         font-family: monospace;
         overflow: scroll;
       }
-
+      
       button {
         padding: 1px 1em;
         font-size: 90%;
         border-radius: 4px;
         border-bottom-color: #ddd;
-        /* border: 1px solid #ddd; */
-        /* border: 0.2rem outset rgb(37, 85, 219); */
-        /* background-color: rgb(44, 90, 220); */
-        background-color: #eee;
+        border: 0.2rem outset;
         color: black;
+        font-family: cursive;
       }
       button.launch {
         border: 1px solid #d43;
@@ -299,109 +405,215 @@
       button:hover {
         box-shadow: 2px 2px 5px #888;
       }
+
+      #tab_blocks,#tab_arduino,#tab_xml {
+        height: 10px; /* Adjust as needed */
+      }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background-image: url('needsomehelp.png'); /* Replace 'needsomehelp.png' with your actual image file */
+            background-size: contain; /* Ensure the background image fits within the container */
+            background-repeat: no-repeat; /* Prevent the background image from repeating */
+            border: 1px solid #ddd; /* Slightly grey border */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            padding: 80px; /* Remove any padding */
+            width: 130px; /* Adjust the width as needed */
+            height: 220px; /* Adjust the height as needed */
+        }
+
+
+
+
+
+
+        .bluecontainer {
+            position: absolute;
+            top: 85px;
+            right: 20px;
+            height: 85px;
+            width: 170px;
+            z-index: 1;
+            /*border: 2px solid black; !* Optional *!*/
+        }
+
+        .blueicon {
+            width: 100%;
+            height: 100%;
+        }
+
+
+
+        .textAboveIcon {
+            position: absolute;
+            top: 30px; /* Adjust as needed */
+            left: 50%;
+            transform: translateX(-50%);
+            color: black;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .greencontainer {
+            position: absolute;
+            top: 185px;
+            right: 20px;
+            height: 85px;
+            width: 170px;
+            z-index: 1;
+            /*border: 2px solid black; !* Optional *!*/
+        }
+
+        .greenicon {
+            width: 100%;
+            height: 100%;
+        }
+
+
+
+        .pinkcontainer {
+            position: absolute;
+            top: 285px;
+            right: 20px;
+            height: 85px;
+            width: 170px;
+            z-index: 1;
+            /*border: 2px solid black; !* Optional *!*/
+        }
+
+        .pinkicon {
+            width: 100%;
+            height: 100%;
+        }
+
+        #arrowblue{
+            position: absolute; /* Position the blue icon relative to the container */
+            top: 85px; /* Set top position */
+            left:8px; /* Set right position */
+            height: 85px; /* Set height */
+            width: 80px; /* Set width */
+            z-index:1;
+            /*border: 2px solid black;*/
+            display:none;
+        }
+
+        #arrowgreen{
+            position: absolute; /* Position the blue icon relative to the container */
+            top: 185px; /* Set top position */
+            left:8px; /* Set right position */
+            height: 85px; /* Set height */
+            width: 80px; /* Set width */
+            z-index:1;
+            /*border: 2px solid black;*/
+            display:none;
+        }
+
+        #arrowpink{
+            position: absolute; /* Position the blue icon relative to the container */
+            top: 285px; /* Set top position */
+            left:8px; /* Set right position */
+            height: 85px; /* Set height */
+            width: 80px; /* Set width */
+            z-index:1;
+            /*border: 2px solid black;*/
+            display:none;
+        }
+
+
+
+
+
+        #closeButton {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            z-index: 40;
+            /*border: 2px solid black;*/
+        }
+
+        /* Button styles */
+        #helpBtn {
+            position: fixed;
+            top: 90px;
+            left: 90px;
+            padding: 20px;
+        }
+
+        .grid {
+            position: absolute; /* Set position to absolute */
+            top: 0;
+            left: 0;
+            width: 100%; /* Make the grid cover the entire container */
+            height: 100%;
+            background-image: radial-gradient(grey 5%, transparent 5%); /* Create grid lines with 10% transparency */
+            background-size: 50px 50px; /* Set the size of the grid squares */
+        }
+
+
+      
     </style>
   </head>
   <body onload="init()">
     <table height="100%" width="100%">
       <tr>
         <td>
-          <h1>
-            <a href="https://github.com/gasolin/BlocklyDuino/wiki"
-              >BlocklyDuino</a
-            >
-            &gt; web-based visual programming editor for arduino
-          </h1>
+          <h5><img src=staricon.png style="width: 1em; height: 1em; vertical-align: middle;"> Create memory games with BlocklyDuino!</h5>
         </td>
       </tr>
       <tr>
         <td>
           <table width="100%">
             <tr id="tabRow" height="1em">
-              <td id="tab_blocks" class="tabon" onclick="tabClick('blocks')">
-                Blocks
-              </td>
-              <td class="tabmin">&nbsp;</td>
-              <img
-                id="claimIcon"
-                src="claimicon.png"
-                style="
-                  position: absolute;
-                  top: 50%;
-                  left: 50%;
-                  transform: translate(-50%, -50%) scale(0.2);
-                  display: none;
-                  z-index: 9999;
-                "
-              />
-
+              <!-- <td id="tab_blocks" class="tabon" style ="background-color: rgb(133, 191, 235)" onclick="tabClick('blocks')">Blocks</td>
+              <td class="tabmin">&nbsp;</td> -->
+                <img id="claimIcon" src="claimicon.png" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.2); display: none; z-index: 9999;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                      <h1 id="CurrentScore" style="display: inline-block; margin-right: 20px;">Current Score: 0</h1>
+                      <h2 id="HighScore" style="display: inline-block; margin-right: 20px;">High Score: 0</h2>
+                  </div>
+                  <button type="button" style="border:0.2rem outset rgb(158, 68, 69); color: white; background-color: rgb(158, 68, 69); border-radius: 12px; font-size: 1.2 em; margin-right: 80px;" onclick="toggleModal()">Need help?</button>
+              </div>
+              
+                
+            </tr> 
+            <tr id="tabRow2" height ="1em">
               <!--td id="tab_javascript" class="taboff" onclick="tabClick(this.id)">JavaScript</td>
-            <td class="tabmin">&nbsp;</td-->
+              <td class="tabmin">&nbsp;</td-->
               <!--td id="tab_dart" class="taboff" onclick="tabClick(this.id)">Dart</td>
-            <td class="tabmin">&nbsp;</td>
-            <td id="tab_python" class="taboff" onclick="tabClick(this.id)">Python</td>
-            <td class="tabmin">&nbsp;</td-->
-              <td id="tab_arduino" class="taboff" onclick="tabClick('arduino')">
-                Arduino
-              </td>
+              <td class="tabmin">&nbsp;</td>
+              <td id="tab_python" class="taboff" onclick="tabClick(this.id)">Python</td>
+              <td class="tabmin">&nbsp;</td-->
+              <td id="tab_blocks" class="tabon" onclick="tabClick('blocks')">Blocks</td>
+              <td class="tabmin">&nbsp;</td>
+              <td id="tab_arduino" class="taboff" onclick="tabClick('arduino')">Arduino</td>
               <td class="tabmin">&nbsp;</td>
               <td id="tab_xml" class="taboff" onclick="tabClick('xml')">XML</td>
               <td class="tabmax">
-                <h1 id="CurrentScore">Current Score: 0</h1>
-                <h2 id="HighScore">High Score: 0</h2>
-                <button
-                  type="button"
-                  id="timerButton"
-                  style="
-                    border: 0.2rem outset rgb(37, 85, 219);
-                    background-color: rgb(44, 90, 220);
-                    color: white;
-                  "
-                  onclick="timerClick()"
-                >
-                  Start Timer
-                </button>
-                <button
-                  type="button"
-                  id="stopSession"
-                  style="
-                    border: 0.2rem outset rgb(37, 85, 219);
-                    background-color: rgb(44, 90, 220);
-                    color: white;
-                  "
-                  onclick="stopSession()"
-                >
-                  Stop Session
-                </button>
-                <button
-                  type="button"
-                  style="
-                    background-color: rgb(158, 68, 69);
-                    border: 0.2rem outset rgb(158, 68, 69);
-                    color: white;
-                  "
-                  onclick="openInstructions()"
-                >
-                  Help
-                </button>
+                <!-- <button type = "button" id="timerButton" style = "border: 0.2rem outset rgb(37, 85, 219);background-color: rgb(44, 90, 220); color: white" onclick="timerClick()">Start Timer</button> -->
+                <!-- <button type = "button" id="stopSession" style = "border: 0.2rem outset rgb(37, 85, 219);background-color: rgb(44, 90, 220); color: white"onclick="stopSession()">Stop Session</button> -->
+                <!-- <button type="button" style="background-color: rgb(158, 68, 69); border:0.2rem outset rgb(158, 68, 69); color: white " onclick="openInstructions()">Help</button> -->
+                <button type = "button" id="timerButton" style = " border: 0.2rem outset; color: black; " onclick="timerClick()">Start Timer</button>
+                <button type = "button" id="stopSession" style = "border: 0.2rem outset; color: black"onclick="stopSession()">Stop Session</button>
+                <!-- <button type="button" style="border:0.2rem outset; color: black " onclick="openInstructions()">Help</button> -->
                 <button type="button" onclick="uploadClick()">Upload</button>
-
                 <button type="button" onclick="resetClick()">Reset</button>
                 <button onclick="discard()">Discard</button>
                 <button onclick="saveCode()">Save Arduino Code</button>
                 <button onclick="save()">Save XML</button>
                 <button id="fakeload">Load XML</button>
-                <button
-                  id="clearhighscore"
-                  style="
-                    background-color: rgb(158, 68, 69);
-                    border: 0.2rem outset rgb(158, 68, 69);
-                    color: white;
-                  "
-                  onclick="clearhighscore()"
-                >
-                  Clear High Score
-                </button>
-                <input type="file" id="load" style="display: none" />
+                <button id="clearhighscore" style="border:0.2rem outset; color: black" onclick="clearhighscore()">Clear High Score</button>
+                <input type="file" id="load" style="display: none;"/>
                 <!--button class="launch" onclick="runJS()">Run Program</button-->
               </td>
             </tr>
@@ -413,12 +625,7 @@
       </tr>
     </table>
     <div id="content_blocks" class="content"></div>
-    <textarea
-      id="content_arduino"
-      class="content"
-      readonly
-      wrap="off"
-    ></textarea>
+    <textarea id="content_arduino" class="content" readonly wrap="off"></textarea>
     <textarea id="content_xml" class="content" wrap="off"></textarea>
 
     <xml id="toolbox" style="display: none">
@@ -548,10 +755,33 @@
       <category name="Grove Motor">
         <block type="grove_motor_shield"></block>
       </category>
-      <category name="Memory Games">
-        <block type='dummyBlock'></block>
-      </category>
+
     </xml>
+    
+    <!-- Modal box -->
+    <div id="helpModal" class="modal">
+        <!-- Content goes here -->
+        <img id="closeButton" src="nohelp.PNG" alt="Close Button" width="40" height="40">
+    <!--    <img id="blueIcon" src="blueicon.png" alt="Blue Icon">-->
+        <div class="bluecontainer">
+            <img class="blueicon" src="blueicon.png" alt="Blue Icon">
+            <span class="textAboveIcon">Sequence Length</span>
+        </div>
+      
+        <div class="greencontainer">
+            <img class="greenicon" src="greenicon.png" alt="Green Icon">
+            <span class="textAboveIcon">Sequence Speed</span>
+        </div>
+        <div class="pinkcontainer">
+            <img class="pinkicon" src="pinkicon.png" alt="Pink Icon">
+            <span class="textAboveIcon">Feedback Sequence</span>
+        </div>
+        <img id="arrowblue" src="arrow.png" alt="arrow">
+        <img id="arrowgreen" src="arrow.png" alt="arrow">
+        <img id="arrowpink" src="arrow.png" alt="arrow">
+        <div class="grid"></div>
+    </div>
+    
     <script>
       let timerInterval;
       let score = 0;
@@ -561,8 +791,8 @@
       let isIconClicked = false;
 
       function timerClick() {
-        const timerButton = document.getElementById("timerButton");
-        const claimIcon = document.getElementById("claimIcon");
+        const timerButton = document.getElementById('timerButton');
+        const claimIcon = document.getElementById('claimIcon');
 
         if (!isTimerRunning) {
           if (remainingTime <= 0) {
@@ -570,27 +800,34 @@
           }
 
           timerInterval = setInterval(() => {
-            let minutes = Math.floor(remainingTime / 60);
-            let seconds = remainingTime % 60;
-            seconds = seconds < 10 ? "0" + seconds : seconds;
-            timerButton.textContent = `${minutes}:${seconds} remaining`;
+              let minutes = Math.floor(remainingTime / 60);
+              let seconds = remainingTime % 60;
+              seconds = seconds < 10 ? '0' + seconds : seconds;
+              timerButton.textContent = `${minutes}:${seconds} remaining`;
 
-            remainingTime--;
+              remainingTime--;
 
-            if (remainingTime < 0) {
-              clearInterval(timerInterval);
-              isTimerRunning = false;
-              claimIcon.style.display = "block";
-              timerButton.disabled = true;
-              isIconClicked = false;
+              if (remainingTime < 0) {
+                clearInterval(timerInterval);
+                isTimerRunning = false;
+                if (block_dragged == true) {
+                  claimIcon.style.display = 'block';
+                  timerButton.disabled = true;
+                  isIconClicked = false;
+                } else {
+                  remainingTime = 10;
+                  timerClick();
 
-              claimIcon.addEventListener("click", scoreClaimed);
-            }
+                }
+                claimIcon.addEventListener('click', scoreClaimed);
+              }
           }, 1000);
-
+              
           isTimerRunning = true;
+              
+              
         } else {
-          if (claimIcon.style.display === "none") {
+          if (claimIcon.style.display === 'none') {
             clearInterval(timerInterval);
             timerButton.textContent = "Resume Timer";
             isTimerRunning = false;
@@ -599,44 +836,47 @@
       }
 
       function scoreClaimed() {
-        const currentScore = document.getElementById("CurrentScore");
+        const currentScore = document.getElementById('CurrentScore');
         score += 100;
         currentScore.textContent = "Current Score: " + score;
-        const claimIcon = document.getElementById("claimIcon");
-        claimIcon.style.display = "none";
-        const timerButton = document.getElementById("timerButton");
+        const claimIcon = document.getElementById('claimIcon');
+        claimIcon.style.display = 'none';
+        const timerButton = document.getElementById('timerButton');
         timerButton.disabled = false;
+        block_dragged = false;
         // Reset and restart the timer
         remainingTime = 10;
         timerClick();
-      }
+        }
 
       function stopSession() {
-        claimIcon.style.display = "none";
+        claimIcon.style.display = 'none';
 
         clearInterval(timerInterval);
         isTimerRunning = false;
         remainingTime = 10;
-        const timerButton = document.getElementById("timerButton");
-        const currentScore = document.getElementById("CurrentScore");
-        const highScore = document.getElementById("HighScore");
+        const timerButton = document.getElementById('timerButton');
+        const currentScore = document.getElementById('CurrentScore');
+        const highScore = document.getElementById('HighScore');
         timerButton.textContent = "Start timer";
         var highscore = getHighScore();
         if (score > highscore) {
-          saveHighScore(score);
-          highScore.textContent = "High Score: " + score;
+            saveHighScore(score);
+            highScore.textContent = "High Score: " + score;
         }
         score = 0;
         currentScore.textContent = "Current Score: " + score;
         timerButton.disabled = false;
-      }
+      }  
 
-      function clearhighscore() {
-        const highScore = document.getElementById("HighScore");
+      function clearhighscore(){
+        const highScore = document.getElementById('HighScore');
         saveHighScore(0);
         highscore = getHighScore()
         highScore.textContent = "High Score: " + highscore;
       }
+
+
     </script>
   </body>
-</html>
+  </html>
