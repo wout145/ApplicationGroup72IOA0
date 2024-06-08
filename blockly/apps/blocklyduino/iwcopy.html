@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Background Example</title>
+    <style>
+        /* Grid background styles */
+        body {
+            background-color: #fff; /* Set background color to white */
+            background-image: radial-gradient(grey 5%, transparent 5%); /* Create grey dots */
+            background-size: 50px 50px; /* Set the size of the dots */
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background-image: url('pinkpure.jpg'); /* Replace 'needsomehelp.png' with your actual image file */
+            background-size: contain; /* Ensure the background image fits within the container */
+            background-repeat: no-repeat; /* Prevent the background image from repeating */
+            border: 1px solid #ddd; /* Slightly grey border */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            padding: 80px; /* Remove any padding */
+            width: 130px; /* Adjust the width as needed */
+            height: 220px; /* Adjust the height as needed */
+        }
+
+
+
+
+        .titlecontainer {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            height: 45px;
+            width: 170px;
+            z-index: 1;
+            border: 2px solid black;
+            font-size: 18px; /* Example font size */
+            color: #333; /* Optional */
+        }
+
+        .maintitlecontainer {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            height: 45px;
+            width: 170px;
+            z-index: 1;
+            border: 2px solid black;
+            font-size: 18px; /* Example font size */
+            color: #333; /* Optional */
+        }
+
+        .bluecontainer {
+            position: absolute;
+            top: 85px;
+            right: 20px;
+            height: 85px;
+            width: 170px;
+            z-index: 1;
+            /*border: 2px solid black; !* Optional *!*/
+        }
+
+        .blueicon {
+            width: 100%;
+            height: 100%;
+        }
+
+
+
+        .textAboveIcon {
+            position: absolute;
+            top: 30px; /* Adjust as needed */
+            left: 50%;
+            transform: translateX(-50%);
+            color: black;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .textContainer {
+            position: absolute;
+            height: 35px;
+            width: 80px;
+            top: 85px; /* Set top position for the first container */
+            left: 8px; /* Set left position */
+            border: 2px solid black;
+            font-size: 10px;
+        }
+
+        .arrowContainer {
+            position: absolute;
+            height: 30px;
+            width: 30px;
+            top: 125px; /* Set top position for the first container */
+            left: 60px;
+            /*border: 2px solid black;*/
+            background-image: url('biggerarrow.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+
+        }
+
+        .greencontainer {
+            position: absolute;
+            top: 185px;
+            right: 20px;
+            height: 85px;
+            width: 170px;
+            z-index: 1;
+            /*border: 2px solid black; !* Optional *!*/
+        }
+
+        .greenicon {
+            width: 100%;
+            height: 100%;
+        }
+
+
+
+        .pinkcontainer {
+            position: absolute;
+            top: 285px;
+            right: 20px;
+            height: 85px;
+            width: 170px;
+            z-index: 1;
+            /*border: 2px solid black; !* Optional *!*/
+        }
+
+        .pinkicon {
+            width: 100%;
+            height: 100%;
+        }
+
+        #arrowblue{
+            position: absolute; /* Position the blue icon relative to the container */
+            top: 85px; /* Set top position */
+            left:8px; /* Set right position */
+            height: 85px; /* Set height */
+            width: 80px; /* Set width */
+            z-index:1;
+            /*border: 2px solid black;*/
+            display:none;
+        }
+
+        #arrowgreen{
+            position: absolute; /* Position the blue icon relative to the container */
+            top: 185px; /* Set top position */
+            left:8px; /* Set right position */
+            height: 85px; /* Set height */
+            width: 80px; /* Set width */
+            z-index:1;
+            /*border: 2px solid black;*/
+            display:none;
+        }
+
+        #arrowpink{
+            position: absolute; /* Position the blue icon relative to the container */
+            top: 285px; /* Set top position */
+            left:8px; /* Set right position */
+            height: 85px; /* Set height */
+            width: 80px; /* Set width */
+            z-index:1;
+            /*border: 2px solid black;*/
+            display:none;
+        }
+
+
+        #text1 {
+            top: 85px;
+        }
+
+        #text2 {
+            top: 185px;
+        }
+
+        #text3 {
+            top: 285px;
+        }
+        #arrow1 {
+            top: 125px;
+
+        }
+
+        #arrow2 {
+            top: 225px;
+
+        }
+
+        #arrow3 {
+            top: 325px;
+
+        }
+
+
+        #closeButton {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            z-index: 40;
+            /*border: 2px solid black;*/
+            transition: transform 0.2s;
+        }
+
+        #closeButton:hover {
+            transform: scale(1.5);
+        }
+
+        #returnButton {
+            position: absolute;
+            top: 10px;
+            left: 8px;
+            width: 100px;
+            height: 40px;
+            z-index: 40;
+            background: none;
+            transition: transform 0.2s;
+            background-size: contain;
+            background-position: center;
+        }
+
+        #returnButton img {
+            width: 100%;
+            height: 100%;
+        }
+
+        #returnButton:hover {
+            transform: scale(1.5);
+        }
+
+        /* Button styles */
+        #helpBtn {
+            position: fixed;
+            top: 90px;
+            left: 90px;
+            padding: 20px;
+        }
+
+        .grid {
+            position: absolute; /* Set position to absolute */
+            top: 0;
+            left: 0;
+            width: 100%; /* Make the grid cover the entire container */
+            height: 100%;
+            background-image: radial-gradient(grey 5%, transparent 5%); /* Create grid lines with 10% transparency */
+            background-size: 50px 50px; /* Set the size of the grid squares */
+        }
+
+
+    </style>
+</head>
+<body>
+
+<!-- Help button -->
+<button id="helpBtn">Help</button>
+
+<!-- Modal box -->
+<div id="helpModal" class="modal">
+    <!-- Content goes here -->
+    <img id="closeButton" src="nobutton.PNG" alt="Close Button" width="40" height="40">
+    <div class="maintitlecontainer">title goes here</div>
+<!--    <img id="blueIcon" src="blueicon.png" alt="Blue Icon">-->
+    <div class="bluecontainer">
+        <img class="blueicon" src="blueicon.png" alt="Blue Icon">
+        <span class="textAboveIcon">SPEED :)</span>
+    </div>
+
+    <div class="greencontainer">
+        <img class="greenicon" src="greenicon.png" alt="Green Icon">
+    </div>
+    <div class="pinkcontainer">
+        <img class="pinkicon" src="pinkicon.png" alt="Pink Icon">
+    </div>
+    <img id="arrowblue" src="arrow.png" alt="arrow">
+    <img id="arrowgreen" src="arrow.png" alt="arrow">
+    <img id="arrowpink" src="arrow.png" alt="arrow">
+    <div class="grid"></div>
+
+    <audio id="hoverSound">
+        <source src="tinyclick.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+
+</div>
+
+<div id="blueModal" class="modal" style="display: none; background-image: url('bluepure.png');background-size: cover;">
+
+    <div class="grid"></div>
+    <div id="text1" class="textContainer">Text 1</div>
+    <div id="text2" class="textContainer">Text 2</div>
+    <div id="text3" class="textContainer">Text 3</div>
+    <div id="arrow1" class="arrowContainer"></div>
+    <div id="arrow2" class="arrowContainer"></div>
+    <div id="arrow3" class="arrowContainer"></div>
+    <div class="bluecontainer" style="background-image: url('blocks.jpg'); background-size: cover; background-repeat: no-repeat;"></div>
+    <div class="pinkcontainer" style="background-image: url('blocksgif.gif'); background-size: cover; background-repeat: no-repeat;"></div>
+    <div class="titlecontainer">title goes here</div>
+    <button id="returnButton" style="position: absolute; top: 10px; left: 8px; width: 50px; height: 40px; z-index: 40; transition: transform 0.2s;">
+        <img src="return.png" alt="Return Button" width="40" height="40">
+    </button>
+
+
+
+</div>
+
+
+
+<script>
+    // Function to open the modal
+    function openModal() {
+        document.getElementById('helpModal').style.display = 'block';
+    }
+    function openBlueModal() {
+        document.getElementById('blueModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('helpModal').style.display = 'none';
+    }
+
+    document.querySelector('.bluecontainer').addEventListener('click', function() {
+        openBlueModal('blueModal');
+    });
+
+
+    // Event listener for the help button
+    document.getElementById('helpBtn').addEventListener('click', openModal);
+
+    // Event listener for the close button
+    document.getElementById('closeButton').addEventListener('click', closeModal);
+    document.getElementById('closeButton').addEventListener('mouseenter', playHoverSound);
+
+    // Function to show the arrow
+    function showArrow(arrowId) {
+        document.getElementById(arrowId).style.display = 'block';
+    }
+
+    // Function to hide the arrow
+    function playHoverSound() {
+        document.getElementById('hoverSound').play();
+    }
+
+    function hideArrow(arrowId) {
+        document.getElementById(arrowId).style.display = 'none';
+    }
+
+    // Event listeners for the blue container
+    document.querySelector('.bluecontainer').addEventListener('mouseenter', function() {
+        showArrow('arrowblue');
+        playHoverSound();
+    });
+    document.querySelector('.bluecontainer').addEventListener('mouseleave', function() {
+        hideArrow('arrowblue');
+
+    });
+
+    // Event listeners for the green container
+    document.querySelector('.greencontainer').addEventListener('mouseenter', function() {
+        showArrow('arrowgreen');
+        playHoverSound();
+    });
+    document.querySelector('.greencontainer').addEventListener('mouseleave', function() {
+        hideArrow('arrowgreen');
+
+    });
+
+    // Event listeners for the pink container
+    document.querySelector('.pinkcontainer').addEventListener('mouseenter', function() {
+        showArrow('arrowpink');
+        playHoverSound();
+    });
+    document.querySelector('.pinkcontainer').addEventListener('mouseleave', function() {
+        hideArrow('arrowpink');
+    });
+
+    // Add event listener for the return button
+    document.getElementById('returnButton').addEventListener('click', function() {
+        // Close the blueModal
+        document.getElementById('blueModal').style.display = 'none';
+        // Show the helpModal
+        document.getElementById('helpModal').style.display = 'block';
+    });
+
+    // Add event listener for hover effect
+    document.getElementById('returnButton').addEventListener('mouseenter', function() {
+        this.style.transform = 'scale(1.5)';
+    });
+
+    document.getElementById('returnButton').addEventListener('mouseleave', function() {
+        this.style.transform = 'scale(1)';
+    });
+
+</script>
+
+</body>
+</html>

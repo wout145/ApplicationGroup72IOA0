@@ -1,13 +1,19 @@
-// Arduino code for memory game 1
+// Code for memory game 1
+// Make sure you have the LiquidCrystal I2C library installed (via your arduino IDE)
 
-#define LED1 8
-#define LED2 9
-#define LED3 10
-#define LED4 11
-#define BUTTON1 4
-#define BUTTON2 5
-#define BUTTON3 6
-#define BUTTON4 7
+#include "LiquidCrystal_I2C.h"
+
+LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 16, 2); 
+
+
+#define LED1 A0
+#define LED2 A1
+#define LED3 A2
+#define LED4 A3
+#define BUTTON1 5
+#define BUTTON2 4
+#define BUTTON3 3
+#define BUTTON4 2
 
 const int maxSequenceLength = 10;
 int ledPins[4] = {LED1, LED2, LED3, LED4};
@@ -17,40 +23,71 @@ int enteredSequence[maxSequenceLength];
 bool buttonPressed[4] = {false, false, false, false};
 int currentPress = 0;
 bool gameStarted = false;
-int sequenceLength = 0;
+
+//BLOCKS TO BE BUILD:
+int sequenceLength = 3;
+int TimeBetweenLights = 500;
+
+//Reward if correct
+int WhichLightShouldBlinkCorrect = 5;
+int AmountOfBlinksCorrect = 5;
+int HowLongEachBlinkCorrect = 300;
+
+//Reward if wrong
+int WhichLightShouldBlinkWrong = 2;
+int AmountOfBlinksWrong = 10;
+int HowLongEachBlinkWrong = 400;
 
 void setup() {
+  // Initialize LCD and turn on the backlight:
+  lcd.init();
+  lcd.backlight();
+  lcd.clear();
   
-  // Setting up LEDs and buttons
+    // Setting up LEDs and buttons
   for (int i = 0; i < 4; i++) {
     pinMode(ledPins[i], OUTPUT);
     pinMode(buttonPins[i], INPUT);
   }
+
+    lcd.setCursor(0, 0); // Set cursor to the first column of the first row
+    lcd.print("Welcome to");
+    lcd.setCursor(0, 1); // Set cursor to the first column of the second row
+    lcd.print("Memory game 1!");
+    Serial.begin(9600);
+    randomSeed(analogRead(0));
+	delay(2000); // Wait for 2 seconds
   
-  Serial.begin(9600);
-  randomSeed(analogRead(0));
+      //askForSequenceLength();
   
-  askForSequenceLength();
-  
-  
+
 }
 
 void loop() {
   
-  if (Serial.available() > 0) {
-    sequenceLength = Serial.parseInt();
+  if (sequenceLength > 0) {
+    sequenceLength = sequenceLength;
     if (sequenceLength > 0 && sequenceLength <= maxSequenceLength) {
-      Serial.print("You entered: ");
-      Serial.println(sequenceLength);
+      lcd.clear();
+	  lcd.print("Chosen sequence-");
+	  lcd.setCursor(0, 1);
+	  lcd.print("length = ");
+      lcd.print(sequenceLength);
       gameStarted = true;
     } else {
-      Serial.println("Invalid Sequence Length");
-      askForSequenceLength();
+      lcd.clear();
+      lcd.print("Invalid Sequence Length");
+      //askForSequenceLength();
     }
     
     if (gameStarted) {
       generateRandomSequence();
+      SequenceCountDown();
       showSequence();
+      
+      lcd.print("Enter your");
+      lcd.setCursor(0,1);
+      lcd.print("answer now!");
       
       while (currentPress < sequenceLength) {
         
@@ -60,36 +97,97 @@ void loop() {
       
       if (checkSequence()) {
         
-        Serial.println("Correct");
-        blinkAllLeds(3, 200);
+        lcd.clear();
+        delay(500);
+        lcd.print("That was");
+        lcd.setCursor(0,1);
+        lcd.print("correct!");
+        blinkAllLeds(AmountOfBlinksCorrect, HowLongEachBlinkCorrect);
+        
+        askForAnotherRound();
+        
         
       } else {
-        Serial.println("False");
-        blinkLed(LED1, 1, 1000);
+        
+        lcd.clear();
+        delay(500);
+        lcd.print("That was");
+        lcd.setCursor(0,1);
+        lcd.print("wrong...");
+        
+        if (WhichLightShouldBlinkWrong == 1){
+          blinkLed(LED1, AmountOfBlinksWrong, HowLongEachBlinkWrong);
+          }
+        else if (WhichLightShouldBlinkWrong == 2){
+          blinkLed(LED2, AmountOfBlinksWrong, HowLongEachBlinkWrong);
+          }
+        
+        else if (WhichLightShouldBlinkWrong == 3){
+          blinkLed(LED3, AmountOfBlinksWrong, HowLongEachBlinkWrong);
+          }
+        
+        else if (WhichLightShouldBlinkWrong == 4){
+          blinkLed(LED4, AmountOfBlinksWrong, HowLongEachBlinkWrong);
+          }        
+        else {
+          blinkAllLeds(AmountOfBlinksWrong, HowLongEachBlinkCorrect);       
+      	  }
+        
+        askForAnotherRound();
+      	        
       }
       
-      askForAnotherRound();
-      
-    }
-    
-  }
-  
-  
-  
+    } 
+
+  }  
+
 }
 
-void askForSequenceLength() {
+void SequenceCountDown() {
+  delay(3000); //Delay while showing text "you entered"
+  lcd.clear();
+  lcd.print("Showing sequence");
+  lcd.setCursor(0, 1); // Set cursor to the first column of the second row
+  lcd.print("in...");
+  delay(1500);
+  lcd.clear();
+  lcd.print("3...");
+  delay(1000);
+  lcd.clear();
+  lcd.print("2...");
+  delay(1000);
+  lcd.clear();
+  lcd.print("1...");
+  delay(1000);
+  lcd.clear();
+  delay(1000);
+}
+  
+  
+
+void askForSequenceLength() {//NOT USED IN THE CURRENT GAME
  
   int response;
   
-  delay(10);
+  delay(1000);
+  lcd.clear();
+  
 
-  Serial.println("Please enter a sequence length (0-10)");
+  lcd.setCursor(0, 0); // Set cursor to the first column of the first row
+  lcd.print("Enter sequence");
+  lcd.setCursor(0, 1); // Set cursor to the first column of the second row
+  lcd.print("length 0-10");
+  Serial.begin(9600);
+  randomSeed(analogRead(0)); 
+  
+  
+
   while(Serial.available() > 0) {
     Serial.read();
   }
   
   gameStarted = false;
+  
   
 }
 
@@ -100,11 +198,12 @@ void generateRandomSequence() {
 }
 
 void showSequence() {
+    
   for (int i = 0; i < sequenceLength; i++) {
     digitalWrite(ledPins[randomSequence[i]], HIGH);
-    delay(500);
+    delay(TimeBetweenLights);
     digitalWrite(ledPins[randomSequence[i]], LOW);
-    delay(500);
+    delay(TimeBetweenLights);
   }
   
   currentPress = 0;
@@ -170,22 +269,28 @@ void blinkLed(int ledNr, int times, int duration) {
 
 void askForAnotherRound() {
   
-  Serial.println("Do you want to play another round? (y/n): ");
-  while (true) {
-    if (Serial.available()> 0) {
-      char response = Serial.read();
-      if (response == 'y' || response == 'Y') {
-        for (int i = 0; i < 4; i++) {
-          buttonPressed[i] = false;
-        }
-        currentPress = 0;
-        askForSequenceLength();
-        break;
-      } else if (response == 'n' || response == 'N') {
-        Serial.println("Game Over");
-        while(true);
-      } 
-    }
-  }
+  lcd.clear();
+  lcd.print("Play again?");
+  lcd.setCursor(0,1);
+  delay(1500);
+  lcd.print("left=y right=n");
   
+  
+
+  while (true) {
+    if (digitalRead(BUTTON1) == HIGH) { // Left button for "yes"
+      for (int i = 0; i < 4; i++) {
+        buttonPressed[i] = false;
+      }
+      currentPress = 0;
+      //askForSequenceLength();
+      break;
+    } else if (digitalRead(BUTTON4) == HIGH) { // Right button for "no"
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Game Over");
+      while (true); // Infinite loop to end the game
+    }
+    delay(50); // Debounce delay
+  }
 }
