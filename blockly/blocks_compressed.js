@@ -3055,10 +3055,120 @@ Blockly.Blocks.variables_set = {
   customContextMenu: Blockly.Blocks.variables_get.customContextMenu,
 };
 
-Blockly.Blocks['dummyBlock'] = {
+Blockly.Blocks['declarations1'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Rest of code");
+        .appendField("Declare Variables Memory Game 1");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+ this.setTooltip("Dummy Block");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['generateRandomSequence'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Declaration generateRandomSequence()");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+ this.setTooltip("Dummy Block");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['showSequence'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Declaration showSequence()");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+ this.setTooltip("Dummy Block");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['readButtons'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Declaration readButtons()");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+ this.setTooltip("Dummy Block");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['checkSequence'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Declaration checkSequence()");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+ this.setTooltip("Dummy Block");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['blinkAllLeds'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Declaration blinkAllLeds()");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+ this.setTooltip("Dummy Block");
+ this.setHelpUrl("");
+  }
+};
+
+
+Blockly.Blocks['blinkLed'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Declaration blinkLed()");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+ this.setTooltip("Dummy Block");
+ this.setHelpUrl("");
+  }
+};
+
+
+Blockly.Blocks['askForAnotherRound'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Declaration askForAnotherRound()");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+ this.setTooltip("Dummy Block");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['sequenceCountdown'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Declaration sequenceCountdown()");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+ this.setTooltip("Dummy Block");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['mainLoop'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Main Loop contents");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(230);
