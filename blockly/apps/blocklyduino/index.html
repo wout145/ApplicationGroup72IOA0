@@ -1,6 +1,6 @@
-  <html manifest=node.manifest>
+<html manifest="node.manifest">
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>BlocklyDuino</title>
     <script type="text/javascript" src="../../blockly_compressed.js"></script>
     <script type="text/javascript" src="../../blocks_compressed.js"></script>
@@ -10,286 +10,310 @@
     <script type="text/javascript" src="spin.js"></script>
     <script type="text/javascript" src="FileSaver.min.js"></script>
     <script type="text/javascript" src="blockly_helper.js"></script>
-<script>
-
-    var modalOpened = false;
-
-    // Function to open the modal
-    function toggleModal() {
-      if (!modalOpened) {
-        document.getElementById('helpModal').style.display = 'block';
-        modalOpened = true;
-
-    // Event listener for the close button
-    document.getElementById('closeButton').addEventListener('click', toggleModal);
-    document.getElementById('closeButton').addEventListener('mouseenter', playHoverSound);
-    document.querySelector('.bluecontainer').addEventListener('click', function() {
-        openBlueModal('blueModal');
-    });
-    // Event listeners for the blue container
-    document.querySelector('.bluecontainer').addEventListener('mouseenter', function() {
-        showArrow('arrowblue');
-        playHoverSound();
-    });
-    document.querySelector('.bluecontainer').addEventListener('mouseleave', function() {
-        hideArrow('arrowblue');
-
-    });
-
-    // Event listeners for the green container
-    document.querySelector('.greencontainer').addEventListener('mouseenter', function() {
-        showArrow('arrowgreen');
-        playHoverSound();
-    });
-    document.querySelector('.greencontainer').addEventListener('mouseleave', function() {
-        hideArrow('arrowgreen');
-
-    });
-
-    // Event listeners for the pink container
-    document.querySelector('.pinkcontainer').addEventListener('mouseenter', function() {
-        showArrow('arrowpink');
-        playHoverSound();
-    });
-    document.querySelector('.pinkcontainer').addEventListener('mouseleave', function() {
-        hideArrow('arrowpink');
-    });
-
-      } else {
-
-        document.getElementById('helpModal').style.display = 'none';
-        modalOpened = false;
-      }
-    }
-
-    function openBlueModal() {
-        document.getElementById('blueModal').style.display = 'block';
-
-
-    // Add event listener for the return button
-    document.getElementById('returnButton').addEventListener('click', function() {
-        // Close the blueModal
-        document.getElementById('blueModal').style.display = 'none';
-        // Show the helpModal
-        document.getElementById('helpModal').style.display = 'block';
-    });
-
-    // Add event listener for hover effect
-    document.getElementById('returnButton').addEventListener('mouseenter', function() {
-        this.style.transform = 'scale(1.5)';
-    });
-
-    document.getElementById('returnButton').addEventListener('mouseleave', function() {
-        this.style.transform = 'scale(1)';
-    });
-
-    }
-
-
-
-    // Function to show the arrow
-    function showArrow(arrowId) {
-        document.getElementById(arrowId).style.display = 'block';
-    }
-
-    // Function to hide the arrow
-    function playHoverSound() {
-        document.getElementById('hoverSound').play();
-    }
-
-    function hideArrow(arrowId) {
-        document.getElementById(arrowId).style.display = 'none';
-    }
-
-
-</script>
-
     <script>
+      var modalOpened = false;
 
-  /**
-   * List of tab names.
-   * @private
-   */
-  var TABS_ = ['blocks', 'arduino', 'xml']; 
+      // Function to open the modal
+      function toggleModal() {
+        if (!modalOpened) {
+          document.getElementById("helpModal").style.display = "block";
+          modalOpened = true;
 
-  var selected = 'blocks';
+          // Event listener for the close button
+          document
+            .getElementById("closeButton")
+            .addEventListener("click", toggleModal);
+          document
+            .querySelector(".bluecontainer")
+            .addEventListener("click", function () {
+              openSubModal("blueModal");
+            });
+          document
+            .querySelector(".greencontainer")
+            .addEventListener("click", function () {
+              openSubModal("greenModal");
+            });
+          document
+            .querySelector(".pinkcontainer")
+            .addEventListener("click", function () {
+              openSubModal("pinkModal");
+            });
+          // Event listeners for the blue container
+          document
+            .querySelector(".bluecontainer")
+            .addEventListener("mouseenter", function () {
+              showArrow("arrowblue");
+              playHoverSound();
+            });
+          document
+            .querySelector(".bluecontainer")
+            .addEventListener("mouseleave", function () {
+              hideArrow("arrowblue");
+            });
 
-  var block_dragged = false;
+          // Event listeners for the green container
+          document
+            .querySelector(".greencontainer")
+            .addEventListener("mouseenter", function () {
+              showArrow("arrowgreen");
+              playHoverSound();
+            });
+          document
+            .querySelector(".greencontainer")
+            .addEventListener("mouseleave", function () {
+              hideArrow("arrowgreen");
+            });
 
-  /**
-   * Switch the visible pane when a tab is clicked.
-   * @param {string} clickedName Name of tab clicked.
-   */
-  function tabClick(clickedName) {
-    // If the XML tab was open, save and render the content.
-    if (document.getElementById('tab_xml').className == 'tabon') {
-      var xmlTextarea = document.getElementById('content_xml');
-      var xmlText = xmlTextarea.value;
-      var xmlDom = null;
-      try {
-        xmlDom = Blockly.Xml.textToDom(xmlText);
-      } catch (e) {
-        var q =
-            window.confirm('Error parsing XML:\n' + e + '\n\nAbandon changes?');
-        if (!q) {
-          // Leave the user on the XML tab.
-          return;
+          // Event listeners for the pink container
+          document
+            .querySelector(".pinkcontainer")
+            .addEventListener("mouseenter", function () {
+              showArrow("arrowpink");
+              playHoverSound();
+            });
+          document
+            .querySelector(".pinkcontainer")
+            .addEventListener("mouseleave", function () {
+              hideArrow("arrowpink");
+            });
+        } else {
+          document.getElementById("helpModal").style.display = "none";
+          modalOpened = false;
         }
       }
-      if (xmlDom) {
-        Blockly.mainWorkspace.clear();
-        Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
+
+      function openSubModal(modaltoopen) {
+        document.getElementById("blueModal").style.display = "none";
+        document.getElementById("greenModal").style.display = "none";
+        document.getElementById("pinkModal").style.display = "none";
+
+        const modal = document.getElementById(modaltoopen);
+        modal.style.display = "block";
+
+        const returnButton = modal.querySelector("#returnButton");
+
+        // Remove existing event listeners to prevent duplicate events
+        const newReturnButton = returnButton.cloneNode(true);
+        returnButton.parentNode.replaceChild(newReturnButton, returnButton);
+
+        newReturnButton.onclick = function () {
+          // Close the blueModal
+          document.getElementById(modaltoopen).style.display = "none";
+          // Show the helpModal
+          document.getElementById("helpModal").style.display = "block";
+        };
+
+        newReturnButton.onmouseenter = function () {
+          this.style.transform = "scale(1.5)";
+        };
+
+        newReturnButton.onmouseleave = function () {
+          this.style.transform = "scale(1)";
+        };
       }
-    }
 
-    if (document.getElementById('tab_blocks').className == 'tabon') {
-      Blockly.mainWorkspace.setVisible(false);
-    }
-    // Deselect all tabs and hide all panes.
-    for (var i = 0; i < TABS_.length; i++) {
-      var name = TABS_[i];
-      document.getElementById('tab_' + name).className = 'taboff';
-      document.getElementById('content_' + name).style.visibility = 'hidden';
-    }
+      // Function to show the arrow
+      function showArrow(arrowId) {
+        document.getElementById(arrowId).style.display = "block";
+      }
 
-  // Select the active tab.
-    selected = clickedName;
-    document.getElementById('tab_' + clickedName).className = 'tabon';
-    // Show the selected pane.
-    document.getElementById('content_' + clickedName).style.visibility =
-        'visible';
-    renderContent();
-    if (clickedName == 'blocks') {
-      Blockly.mainWorkspace.setVisible(true);
-    }
-    Blockly.fireUiEvent(window, 'resize');
-  }
+      // Function to hide the arrow
+      function playHoverSound() {
+        document.getElementById("hoverSound").play();
+      }
 
-  /**
-   * Populate the currently selected pane with content generated from the blocks.
-   */
-  function renderContent() {
-    var content = document.getElementById('content_' + selected);
-    // Initialize the pane.
-    if (content.id == 'content_blocks') {
-      // If the workspace was changed by the XML tab, Firefox will have performed
-      // an incomplete rendering due to Blockly being invisible.  Rerender.
-      Blockly.mainWorkspace.render();
-    } else if (content.id == 'content_xml') {
-      var xmlTextarea = document.getElementById('content_xml');
-      var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-      var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
-      xmlTextarea.value = xmlText;
-      xmlTextarea.focus();
-    /*} else if (content.id == 'content_javascript') {
+      function hideArrow(arrowId) {
+        document.getElementById(arrowId).style.display = "none";
+      }
+    </script>
+
+    <script>
+      /**
+       * List of tab names.
+       * @private
+       */
+      var TABS_ = ["blocks", "arduino", "xml"];
+
+      var selected = "blocks";
+
+      var block_dragged = false;
+
+      /**
+       * Switch the visible pane when a tab is clicked.
+       * @param {string} clickedName Name of tab clicked.
+       */
+      function tabClick(clickedName) {
+        // If the XML tab was open, save and render the content.
+        if (document.getElementById("tab_xml").className == "tabon") {
+          var xmlTextarea = document.getElementById("content_xml");
+          var xmlText = xmlTextarea.value;
+          var xmlDom = null;
+          try {
+            xmlDom = Blockly.Xml.textToDom(xmlText);
+          } catch (e) {
+            var q = window.confirm(
+              "Error parsing XML:\n" + e + "\n\nAbandon changes?"
+            );
+            if (!q) {
+              // Leave the user on the XML tab.
+              return;
+            }
+          }
+          if (xmlDom) {
+            Blockly.mainWorkspace.clear();
+            Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
+          }
+        }
+
+        if (document.getElementById("tab_blocks").className == "tabon") {
+          Blockly.mainWorkspace.setVisible(false);
+        }
+        // Deselect all tabs and hide all panes.
+        for (var i = 0; i < TABS_.length; i++) {
+          var name = TABS_[i];
+          document.getElementById("tab_" + name).className = "taboff";
+          document.getElementById("content_" + name).style.visibility =
+            "hidden";
+        }
+
+        // Select the active tab.
+        selected = clickedName;
+        document.getElementById("tab_" + clickedName).className = "tabon";
+        // Show the selected pane.
+        document.getElementById("content_" + clickedName).style.visibility =
+          "visible";
+        renderContent();
+        if (clickedName == "blocks") {
+          Blockly.mainWorkspace.setVisible(true);
+        }
+        Blockly.fireUiEvent(window, "resize");
+      }
+
+      /**
+       * Populate the currently selected pane with content generated from the blocks.
+       */
+      function renderContent() {
+        var content = document.getElementById("content_" + selected);
+        // Initialize the pane.
+        if (content.id == "content_blocks") {
+          // If the workspace was changed by the XML tab, Firefox will have performed
+          // an incomplete rendering due to Blockly being invisible.  Rerender.
+          Blockly.mainWorkspace.render();
+        } else if (content.id == "content_xml") {
+          var xmlTextarea = document.getElementById("content_xml");
+          var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+          var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
+          xmlTextarea.value = xmlText;
+          xmlTextarea.focus();
+          /*} else if (content.id == 'content_javascript') {
       content.innerHTML = Blockly.JavaScript.workspaceToCode();
     } else if (content.id == 'content_dart') {
       content.innerHTML = Blockly.Dart.workspaceToCode();
     } else if (content.id == 'content_python') {
       content.innerHTML = Blockly.Python.workspaceToCode();*/
-    } else if (content.id == 'content_arduino') {
-      //content.innerHTML = Blockly.Arduino.workspaceToCode();
-      var arduinoTextarea = document.getElementById('content_arduino');
-      arduinoTextarea.value = Blockly.Arduino.workspaceToCode();
-      arduinoTextarea.focus();
-    }
-  }
-
-  /**
-   * Compute the absolute coordinates and dimensions of an HTML element.
-   * @param {!Element} element Element to match.
-   * @return {!Object} Contains height, width, x, and y properties.
-   * @private
-   */
-  function getBBox_(element) {
-    var height = element.offsetHeight;
-    var width = element.offsetWidth;
-    var x = 0;
-    var y = 0;
-    do {
-      x += element.offsetLeft;
-      y += element.offsetTop;
-      element = element.offsetParent;
-    } while (element);
-    return {
-      height: height,
-      width: width,
-      x: x,
-      y: y
-    };
-  }
-  function saveHighScore(score) {
-    localStorage.setItem('highScore', score);
-  }
-
-  // Retrieve high score from localStorage
-  function getHighScore() {
-    return localStorage.getItem('highScore') || 0;
-  }
-
-  function handleBlockDrag(event) {
-    block_dragged = true;
-    console.log('A block was dragged into the workspace!');
-  }
-
-  /**
-   * Initialize Blockly.  Called on page load.
-   */
-  function init() {
-    //window.onbeforeunload = function() {
-    //  return 'Leaving this page will result in the loss of your work.';
-    //};
-
-    var container = document.getElementById('content_area');
-    var HighScore = document.getElementById('HighScore');
-    HighScore.textContent = "High Score: " + getHighScore();
-    var onresize = function(e) {
-      var bBox = getBBox_(container);
-      for (var i = 0; i < TABS_.length; i++) {
-        var el = document.getElementById('content_' + TABS_[i]);
-        el.style.top = bBox.y + 'px';
-        el.style.left = bBox.x + 'px';
-        // Height and width need to be set, read back, then set again to
-        // compensate for scrollbars.
-        el.style.height = bBox.height + 'px';
-        el.style.height = (2 * bBox.height - el.offsetHeight) + 'px';
-        el.style.width = bBox.width + 'px';
-        el.style.width = (2 * bBox.width - el.offsetWidth) + 'px';
+        } else if (content.id == "content_arduino") {
+          //content.innerHTML = Blockly.Arduino.workspaceToCode();
+          var arduinoTextarea = document.getElementById("content_arduino");
+          arduinoTextarea.value = Blockly.Arduino.workspaceToCode();
+          arduinoTextarea.focus();
+        }
       }
-      // Make the 'Blocks' tab line up with the toolbox.
-      if (Blockly.mainWorkspace.toolbox_.width) {
-        document.getElementById('tab_blocks').style.minWidth =
-            (Blockly.mainWorkspace.toolbox_.width - 38) + 'px';
+
+      /**
+       * Compute the absolute coordinates and dimensions of an HTML element.
+       * @param {!Element} element Element to match.
+       * @return {!Object} Contains height, width, x, and y properties.
+       * @private
+       */
+      function getBBox_(element) {
+        var height = element.offsetHeight;
+        var width = element.offsetWidth;
+        var x = 0;
+        var y = 0;
+        do {
+          x += element.offsetLeft;
+          y += element.offsetTop;
+          element = element.offsetParent;
+        } while (element);
+        return {
+          height: height,
+          width: width,
+          x: x,
+          y: y,
+        };
+      }
+      function saveHighScore(score) {
+        localStorage.setItem("highScore", score);
+      }
+
+      // Retrieve high score from localStorage
+      function getHighScore() {
+        return localStorage.getItem("highScore") || 0;
+      }
+
+      function handleBlockDrag(event) {
+        block_dragged = true;
+        console.log("A block was dragged into the workspace!");
+      }
+
+      /**
+       * Initialize Blockly.  Called on page load.
+       */
+      function init() {
+        //window.onbeforeunload = function() {
+        //  return 'Leaving this page will result in the loss of your work.';
+        //};
+
+        var container = document.getElementById("content_area");
+        var HighScore = document.getElementById("HighScore");
+        HighScore.textContent = "High Score: " + getHighScore();
+        var onresize = function (e) {
+          var bBox = getBBox_(container);
+          for (var i = 0; i < TABS_.length; i++) {
+            var el = document.getElementById("content_" + TABS_[i]);
+            el.style.top = bBox.y + "px";
+            el.style.left = bBox.x + "px";
+            // Height and width need to be set, read back, then set again to
+            // compensate for scrollbars.
+            el.style.height = bBox.height + "px";
+            el.style.height = 2 * bBox.height - el.offsetHeight + "px";
+            el.style.width = bBox.width + "px";
+            el.style.width = 2 * bBox.width - el.offsetWidth + "px";
+          }
+          // Make the 'Blocks' tab line up with the toolbox.
+          if (Blockly.mainWorkspace.toolbox_.width) {
+            document.getElementById("tab_blocks").style.minWidth =
+              Blockly.mainWorkspace.toolbox_.width - 38 + "px";
             // Account for the 19 pixel margin and on each side.
+          }
+        };
+        window.addEventListener("resize", onresize, false);
+
+        var toolbox = document.getElementById("toolbox");
+        Blockly.inject(document.getElementById("content_blocks"), {
+          grid: { spacing: 25, length: 3, colour: "#ccc", snap: true },
+          media: "../../media/",
+          toolbox: toolbox,
+        });
+
+        Blockly.getMainWorkspace().addChangeListener(handleBlockDrag);
+
+        auto_save_and_restore_blocks();
+
+        //load from url parameter (single param)
+        //http://stackoverflow.com/questions/2090551/parse-query-string-in-javascript
+        var dest = unescape(location.search.replace(/^.*\=/, "")).replace(
+          /\+/g,
+          " "
+        );
+        if (dest) {
+          load_by_url(dest);
+        }
       }
-    };
-    window.addEventListener('resize', onresize, false);
-
-    var toolbox = document.getElementById('toolbox');
-    Blockly.inject(document.getElementById('content_blocks'),
-        {grid:
-            {spacing: 25,
-            length: 3,
-            colour: '#ccc',
-            snap: true},
-        media: '../../media/',
-        toolbox: toolbox});
-
-    Blockly.getMainWorkspace().addChangeListener(handleBlockDrag);
-
-    auto_save_and_restore_blocks();
-
-    //load from url parameter (single param)
-    //http://stackoverflow.com/questions/2090551/parse-query-string-in-javascript
-    var dest = unescape(location.search.replace(/^.*\=/, '')).replace(/\+/g, " ");
-    if(dest){
-      load_by_url(dest);
-    }
-
-  }
     </script>
     <style>
-      html, body {
+      html,
+      body {
         height: 100%;
       }
       body {
@@ -327,13 +351,13 @@
       }
 
       /* Tabs */
-      #tabRow>td {
+      #tabRow > td {
         /* border: 1.5px solid black; */
-        padding-bottom: 5px
+        padding-bottom: 5px;
       }
-      #tabRow2>td{
+      #tabRow2 > td {
         /* border: 1.5px solid black; */
-        padding-bottom: 5px
+        padding-bottom: 5px;
       }
       td.tabon {
         border-bottom-color: #ddd !important;
@@ -363,8 +387,7 @@
         border-right-style: none !important;
         width: auto;
         text-align: right;
-        padding-right: 10px
-      
+        padding-right: 10px;
       }
 
       table {
@@ -376,7 +399,6 @@
       td {
         padding: 0;
         vertical-align: middle;
-        
       }
       .content {
         visibility: hidden;
@@ -401,7 +423,7 @@
         font-family: monospace;
         overflow: scroll;
       }
-      
+
       button {
         padding: 1px 1em;
         font-size: 90%;
@@ -423,259 +445,289 @@
         box-shadow: 2px 2px 5px #888;
       }
 
-      #tab_blocks,#tab_arduino,#tab_xml {
+      #tab_blocks,
+      #tab_arduino,
+      #tab_xml {
         height: 10px; /* Adjust as needed */
       }
 
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            background-image: url('pinkpure.jpg'); /* Replace 'needsomehelp.png' with your actual image file */
-            background-size: contain; /* Ensure the background image fits within the container */
-            background-repeat: no-repeat; /* Prevent the background image from repeating */
-            border: 1px solid #ddd; /* Slightly grey border */
-            border-radius: 10px; /* Rounded corners */
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-            padding: 80px; /* Remove any padding */
-            width: 130px; /* Adjust the width as needed */
-            height: 220px; /* Adjust the height as needed */
-        }
+      .modal {
+        display: none;
+        position: fixed;
+        bottom: 5%;
+        right: 5%;
+        background-image: url("pinkpure.jpg"); /* Replace 'needsomehelp.png' with your actual image file */
+        background-size: cover; /* Ensure the background image fits within the container */
+        background-repeat: no-repeat; /* Prevent the background image from repeating */
+        border: 1px solid #ddd; /* Slightly grey border */
+        border-radius: 10px; /* Rounded corners */
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        padding: 10%; /* Remove any padding */
+        width: 12%; /* Adjust the width as needed */
+        height: 40%; /* Adjust the height as needed */
+      }
 
+      .titlecontainer {
+        position: absolute;
+        top: 4%;
+        right: 5%;
+        height: 10%;
+        width: 75%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+        /*border: 2px solid black;*/
+        font-family: "Caveat", cursive;
+        font-size: 2em; /* Example font size */
+        color: #333; /* Optional */
+      }
 
+      .maintitlecontainer {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 4%;
+        left: 5%;
+        height: 10%;
+        width: 75%;
+        z-index: 1;
+        /*border: 2px solid black;*/
+        font-family: "Caveat", cursive;
+        font-size: 2em; /* Example font size */
+        color: #333; /* Optional */
+      }
 
+      .bluecontainer {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 22%;
+        right: 7.5%;
+        height: 21%;
+        width: 55%;
+        z-index: 1;
+        /*border: 2px solid black; /* Optional */
+      }
 
-        .titlecontainer {
-            position: absolute;
-            top: 20px;
-            right: 13px;
-            height: 45px;
-            width: 220px;
-            z-index: 1;
-            /*border: 2px solid black;*/
-            font-family: 'Caveat', cursive;
-            font-size: 22px; /* Example font size */
-            font-weight: 600;
-            color: #333; /* Optional */
-        }
+      .instructionimage {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 20%;
+        right: 7.5%;
+        height: 40%;
+        width: 55%;
+        z-index: 1;
+        /*border: 2px solid black; /* Optional */
+      }
 
-        .maintitlecontainer {
-            position: absolute;
-            top: 15px;
-            left: 20px;
-            height: 45px;
-            width: 220px;
-            z-index: 1;
-            /*border: 2px solid black;*/
-            font-family: 'Caveat', cursive;
-            font-size: 22px; /* Example font size */
-            font-weight: 600;
-            color: #333; /* Optional */
-        }
+      .instructiongif {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 60%;
+        right: 7.5%;
+        height: 40%;
+        width: 55%;
+        z-index: 1;
+        /*border: 2px solid black; /* Optional */
+      }
+      .blueicon {
+        width: 100%;
+        height: 100%;
+      }
 
-        .bluecontainer {
-            position: absolute;
-            top: 85px;
-            right: 20px;
-            height: 85px;
-            width: 170px;
-            z-index: 1;
-            /*border: 2px solid black; !* Optional *!*/
-        }
+      .textAboveIcon {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 35%; /* Adjust as needed */
+        left: 50%;
+        transform: translateX(-50%);
+        color: black;
+        font-size: 1.5em;
+        font-weight: 400;
+        text-align: center;
+        /*border: 2px solid black;*/
+        z-index: 2;
+      }
 
-        .blueicon {
-            width: 100%;
-            height: 100%;
-        }
+      .textContainer {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 9%;
+        width: 30%;
+        top: 22%; /* Set top position for the first container */
+        left: 3%; /* Set left position */
+        /*border: 2px solid black;*/
+        font-size: 18px;
+      }
 
+      .arrowContainer {
+        position: absolute;
+        height: 7.5%;
+        width: 11.1%;
+        top: 31%; /* Set top position for the first container */
+        left: 22.2%;
+        /*border: 2px solid black;*/
+        background-image: url("biggerarrow.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
 
+      .greencontainer {
+        position: absolute;
+        top: 46%;
+        right: 7.5%;
+        height: 21%;
+        width: 55%;
+        z-index: 1;
+        /*border: 2px solid black; /* Optional */
+      }
 
-        .textAboveIcon {
-            position: absolute;
-            top: 30px; /* Adjust as needed */
-            left: 50%;
-            transform: translateX(-50%);
-            color: black;
-            font-size: 16px;
-            font-weight: 500;
-            text-align: center;
-            z-index: 2;
-        }
+      .greenicon {
+        width: 100%;
+        height: 100%;
+      }
 
-        .textContainer {
-            position: absolute;
-            height: 35px;
-            width: 80px;
-            top: 85px; /* Set top position for the first container */
-            left: 8px; /* Set left position */
-            border: 2px solid black;
-            font-size: 10px;
-        }
+      .pinkcontainer {
+        position: absolute;
+        top: 71%;
+        right: 7.5%;
+        height: 21%;
+        width: 55%;
+        z-index: 1;
+        /*border: 2px solid black; /* Optional */
+      }
 
-        .arrowContainer {
-            position: absolute;
-            height: 30px;
-            width: 30px;
-            top: 125px; /* Set top position for the first container */
-            left: 60px;
-            /*border: 2px solid black;*/
-            background-image: url('biggerarrow.png');
-            background-size: contain;
-            background-repeat: no-repeat;
+      .pinkicon {
+        width: 100%;
+        height: 100%;
+      }
 
-        }
+      #arrowblue {
+        position: absolute; /* Position the blue icon relative to the container */
+        top: 22%;
+        left: 5%; /* Set right position */
+        height: 21%; /* Set height */
+        width: 30%; /* Set width */
+        z-index: 1;
+        /*border: 2px solid black;*/
+        display: none;
+      }
 
-        .greencontainer {
-            position: absolute;
-            top: 185px;
-            right: 20px;
-            height: 85px;
-            width: 170px;
-            z-index: 1;
-            /*border: 2px solid black; !* Optional *!*/
-        }
+      #arrowgreen {
+        position: absolute; /* Position the blue icon relative to the container */
 
-        .greenicon {
-            width: 100%;
-            height: 100%;
-        }
+        top: 46%;
+        left: 5%; /* Set right position */
+        height: 21%; /* Set height */
+        width: 30%; /* Set width */
+        z-index: 1;
+        /*border: 2px solid black;*/
+        display: none;
+      }
 
+      #arrowpink {
+        position: absolute; /* Position the blue icon relative to the container */
+        top: 71%;
+        left: 5%; /* Set right position */
+        height: 21%; /* Set height */
+        width: 30%; /* S Set width */
+        z-index: 1;
+        /*border: 2px solid black;*/
+        display: none;
+      }
 
+      #text1 {
+        top: 25%;
+      }
 
-        .pinkcontainer {
-            position: absolute;
-            top: 285px;
-            right: 20px;
-            height: 85px;
-            width: 170px;
-            z-index: 1;
-            /*border: 2px solid black; !* Optional *!*/
-        }
+      #text2 {
+        top: 58%;
+      }
 
-        .pinkicon {
-            width: 100%;
-            height: 100%;
-        }
+      #text3 {
+        top: 45%;
+      }
+      #arrow1 {
+        top: 33%;
+      }
 
-        #arrowblue{
-            position: absolute; /* Position the blue icon relative to the container */
-            top: 85px; /* Set top position */
-            left:8px; /* Set right position */
-            height: 85px; /* Set height */
-            width: 80px; /* Set width */
-            z-index:1;
-            /*border: 2px solid black;*/
-            display:none;
-        }
+      #arrow2 {
+        top: 66%;
+      }
 
-        #arrowgreen{
-            position: absolute; /* Position the blue icon relative to the container */
-            top: 185px; /* Set top position */
-            left:8px; /* Set right position */
-            height: 85px; /* Set height */
-            width: 80px; /* Set width */
-            z-index:1;
-            /*border: 2px solid black;*/
-            display:none;
-        }
+      #arrow3 {
+        top: 66;
+      }
 
-        #arrowpink{
-            position: absolute; /* Position the blue icon relative to the container */
-            top: 285px; /* Set top position */
-            left:8px; /* Set right position */
-            height: 85px; /* Set height */
-            width: 80px; /* Set width */
-            z-index:1;
-            /*border: 2px solid black;*/
-            display:none;
-        }
+      #closeButton {
+        position: absolute;
+        top: 4%;
+        right: 5%;
+        cursor: pointer;
+        width: 15%;
+        height: 11%;
+        z-index: 40;
+        /*border: 2px solid black;*/
+        transition: transform 0.2s;
+      }
 
+      #closeButton:hover {
+        transform: scale(1.5);
+      }
 
-        #text1 {
-            top: 85px;
-        }
+      #returnButton {
+        position: absolute;
+        top: 4%;
+        left: 5%;
+        width: 15%;
+        height: 11%;
+        z-index: 40;
+        background: none;
+        transition: transform 0.2s;
+        background-size: contain;
+        background-position: center;
+      }
 
-        #text2 {
-            top: 185px;
-        }
+      #returnButton img {
+        width: 100%;
+        height: 100%;
+      }
 
-        #text3 {
-            top: 285px;
-        }
-        #arrow1 {
-            top: 125px;
+      #returnButton:hover {
+        transform: scale(1.5);
+      }
 
-        }
-
-        #arrow2 {
-            top: 225px;
-
-        }
-
-        #arrow3 {
-            top: 325px;
-
-        }
-
-
-        #closeButton {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            z-index: 40;
-            /*border: 2px solid black;*/
-            transition: transform 0.2s;
-        }
-
-        #closeButton:hover {
-            transform: scale(1.5);
-        }
-
-        #returnButton {
-            position: absolute;
-            top: 15px;
-            left: 8px;
-            width: 40px;
-            height: 40px;
-            z-index: 40;
-            background: none;
-            transition: transform 0.2s;
-            background-size: contain;
-            background-position: center;
-        }
-
-        #returnButton img {
-            width: 100%;
-            height: 100%;
-        }
-
-        #returnButton:hover {
-            transform: scale(1.5);
-        }
-
-        /* Button styles */
-        #helpBtn {
-            position: fixed;
-            top: 90px;
-            left: 90px;
-            padding: 20px;
-        }
-
-
-
-      
+      /* Button styles */
+      #helpBtn {
+        position: fixed;
+        top: 90px;
+        left: 90px;
+        padding: 20px;
+      }
     </style>
   </head>
   <body onload="init()">
     <table height="100%" width="100%">
       <tr>
         <td>
-          <h5><img src=staricon.png style="width: 1em; height: 1em; vertical-align: middle;"> Create memory games with BlocklyDuino!</h5>
+          <h5>
+            <img
+              src="staricon.png"
+              style="width: 1em; height: 1em; vertical-align: middle"
+            />
+            Create memory games with BlocklyDuino!
+          </h5>
         </td>
       </tr>
       <tr>
@@ -684,35 +736,91 @@
             <tr id="tabRow" height="1em">
               <!-- <td id="tab_blocks" class="tabon" style ="background-color: rgb(133, 191, 235)" onclick="tabClick('blocks')">Blocks</td>
               <td class="tabmin">&nbsp;</td> -->
-                <img id="claimIcon" src="claimicon.png" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.2); display: none; z-index: 9999;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <div>
-                      <h1 id="CurrentScore" style="display: inline-block; margin-right: 20px;">Current Score: 0</h1>
-                      <h2 id="HighScore" style="display: inline-block; margin-right: 20px;">High Score: 0</h2>
-                  </div>
-                  <button type="button" style="border:0.2rem outset rgb(158, 68, 69); color: white; background-color: rgb(158, 68, 69); border-radius: 12px; font-size: 1.2 em; margin-right: 80px;" onclick="toggleModal()">Need help?</button>
+              <img
+                id="claimIcon"
+                src="claimicon.png"
+                style="
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%) scale(0.2);
+                  display: none;
+                  z-index: 9999;
+                "
+              />
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <div>
+                  <h1
+                    id="CurrentScore"
+                    style="display: inline-block; margin-right: 20px"
+                  >
+                    Current Score: 0
+                  </h1>
+                  <h2
+                    id="HighScore"
+                    style="display: inline-block; margin-right: 20px"
+                  >
+                    High Score: 0
+                  </h2>
+                </div>
+                <button
+                  type="button"
+                  style="
+                    border: 0.2rem outset rgb(158, 68, 69);
+                    color: white;
+                    background-color: rgb(158, 68, 69);
+                    border-radius: 12px;
+                    font-size: 1.2 em;
+                    margin-right: 80px;
+                  "
+                  onclick="toggleModal()"
+                >
+                  Need help?
+                </button>
               </div>
-              
-                
-            </tr> 
-            <tr id="tabRow2" height ="1em">
+            </tr>
+            <tr id="tabRow2" height="1em">
               <!--td id="tab_javascript" class="taboff" onclick="tabClick(this.id)">JavaScript</td>
               <td class="tabmin">&nbsp;</td-->
               <!--td id="tab_dart" class="taboff" onclick="tabClick(this.id)">Dart</td>
               <td class="tabmin">&nbsp;</td>
               <td id="tab_python" class="taboff" onclick="tabClick(this.id)">Python</td>
               <td class="tabmin">&nbsp;</td-->
-              <td id="tab_blocks" class="tabon" onclick="tabClick('blocks')">Blocks</td>
+              <td id="tab_blocks" class="tabon" onclick="tabClick('blocks')">
+                Blocks
+              </td>
               <td class="tabmin">&nbsp;</td>
-              <td id="tab_arduino" class="taboff" onclick="tabClick('arduino')">Arduino</td>
+              <td id="tab_arduino" class="taboff" onclick="tabClick('arduino')">
+                Arduino
+              </td>
               <td class="tabmin">&nbsp;</td>
               <td id="tab_xml" class="taboff" onclick="tabClick('xml')">XML</td>
               <td class="tabmax">
                 <!-- <button type = "button" id="timerButton" style = "border: 0.2rem outset rgb(37, 85, 219);background-color: rgb(44, 90, 220); color: white" onclick="timerClick()">Start Timer</button> -->
                 <!-- <button type = "button" id="stopSession" style = "border: 0.2rem outset rgb(37, 85, 219);background-color: rgb(44, 90, 220); color: white"onclick="stopSession()">Stop Session</button> -->
                 <!-- <button type="button" style="background-color: rgb(158, 68, 69); border:0.2rem outset rgb(158, 68, 69); color: white " onclick="openInstructions()">Help</button> -->
-                <button type = "button" id="timerButton" style = " border: 0.2rem outset; color: black; " onclick="timerClick()">Start Timer</button>
-                <button type = "button" id="stopSession" style = "border: 0.2rem outset; color: black"onclick="stopSession()">Stop Session</button>
+                <button
+                  type="button"
+                  id="timerButton"
+                  style="border: 0.2rem outset; color: black"
+                  onclick="timerClick()"
+                >
+                  Start Timer
+                </button>
+                <button
+                  type="button"
+                  id="stopSession"
+                  style="border: 0.2rem outset; color: black"
+                  onclick="stopSession()"
+                >
+                  Stop Session
+                </button>
                 <!-- <button type="button" style="border:0.2rem outset; color: black " onclick="openInstructions()">Help</button> -->
                 <button type="button" onclick="uploadClick()">Upload</button>
                 <button type="button" onclick="resetClick()">Reset</button>
@@ -720,8 +828,14 @@
                 <button onclick="saveCode()">Save Arduino Code</button>
                 <button onclick="save()">Save XML</button>
                 <button id="fakeload">Load XML</button>
-                <button id="clearhighscore" style="border:0.2rem outset; color: black" onclick="clearhighscore()">Clear High Score</button>
-                <input type="file" id="load" style="display: none;"/>
+                <button
+                  id="clearhighscore"
+                  style="border: 0.2rem outset; color: black"
+                  onclick="clearhighscore()"
+                >
+                  Clear High Score
+                </button>
+                <input type="file" id="load" style="display: none" />
                 <!--button class="launch" onclick="runJS()">Run Program</button-->
               </td>
             </tr>
@@ -733,7 +847,12 @@
       </tr>
     </table>
     <div id="content_blocks" class="content"></div>
-    <textarea id="content_arduino" class="content" readonly wrap="off"></textarea>
+    <textarea
+      id="content_arduino"
+      class="content"
+      readonly
+      wrap="off"
+    ></textarea>
     <textarea id="content_xml" class="content" wrap="off"></textarea>
 
     <xml id="toolbox" style="display: none">
@@ -863,9 +982,19 @@
       <category name="Grove Motor">
         <block type="grove_motor_shield"></block>
       </category>
-      <category name="Memory Games">
-        <block type="declarations1"></block>
-        <block type="mainLoop"></block>
+      <category name="Memory Game 1">
+        <block type="declarations1">
+          <value name="sequenceLength">
+            <block type="math_number">
+              <field name="NUM">3</field>
+            </block>
+          </value>
+          <value name="sequenceSpeed">
+            <block type="math_number">
+              <field name="NUM">500</field>
+            </block>
+          </value>
+        </block>
         <block type="sequenceCountdown"></block>
         <block type="generateRandomSequence"></block>
         <block type="showSequence"></block>
@@ -874,60 +1003,193 @@
         <block type="blinkAllLeds"></block>
         <block type="blinkLed"></block>
         <block type="askForAnotherRound"></block>
+        <block type="mainSetup"></block>
+        <block type="mainLoop"></block>
       </category>
-
+      <category name="Memory Game 2">
+        <block type="declarations2">
+          <value name="sequenceLength">
+            <block type="math_number">
+              <field name="NUM">3</field>
+            </block>
+          </value>
+          <value name="sequenceSpeed">
+            <block type="math_number">
+              <field name="NUM">750</field>
+            </block>
+          </value>
+        </block>
+        <block type="getButtonSequence"></block>
+        <block type="createLedSequence"></block>
+        <block type="showLedSequence"></block>
+        <block type="blinkAllLeds"></block>
+        <block type="blinkLed"></block>
+        <block type="waitForUserResponse"></block>
+        <block type="mainSetup2"></block>
+        <block type="mainLoop2"></block>
+      </category>
     </xml>
-    
-<!-- Modal box -->
-<div id="helpModal" class="modal">
-    <!-- Content goes here -->
-    <img id="closeButton" src="nobutton.PNG" alt="Close Button" width="40" height="40">
-    <div class="maintitlecontainer">Need some help?</div>
-<!--    <img id="blueIcon" src="blueicon.png" alt="Blue Icon">-->
-    <div class="bluecontainer">
-        <img class="blueicon" src="blueicon.PNG" alt="Blue Icon">
+
+    <!-- Modal box -->
+    <div id="helpModal" class="modal">
+      <!-- Content goes here -->
+      <img
+        id="closeButton"
+        src="nobutton.PNG"
+        alt="Close Button"
+        width="40"
+        height="40"
+      />
+      <div class="maintitlecontainer">Need some help?</div>
+      <!--    <img id="blueIcon" src="blueicon.png" alt="Blue Icon">-->
+      <div class="bluecontainer">
+        <img class="blueicon" src="blueicon.PNG" alt="Blue Icon" />
         <span class="textAboveIcon">Length of sequence</span>
-    </div>
+      </div>
 
-    <div class="greencontainer">
-        <img class="greenicon" src="greenicon.PNG" alt="Green Icon">
+      <div class="greencontainer">
+        <img class="greenicon" src="greenicon.PNG" alt="Green Icon" />
         <span class="textAboveIcon">Speed of sequence</span>
-    </div>
-    <div class="pinkcontainer">
-        <img class="pinkicon" src="pinkicon.PNG" alt="Pink Icon">
+      </div>
+      <div class="pinkcontainer">
+        <img class="pinkicon" src="pinkicon.PNG" alt="Pink Icon" />
         <span class="textAboveIcon">Feedback Sequence</span>
-    </div>
-    <img id="arrowblue" src="arrow.PNG" alt="arrow">
-    <img id="arrowgreen" src="arrow.PNG" alt="arrow">
-    <img id="arrowpink" src="arrow.PNG" alt="arrow">
-    <div class="grid"></div>
+      </div>
+      <img id="arrowblue" src="arrow.PNG" alt="arrow" />
+      <img id="arrowgreen" src="arrow.PNG" alt="arrow" />
+      <img id="arrowpink" src="arrow.PNG" alt="arrow" />
+      <div class="grid"></div>
 
-    <!-- <audio id="hoverSound">
+      <!-- <audio id="hoverSound">
         <source src="tinyclick.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio> -->
+    </div>
 
+    <div
+      id="blueModal"
+      class="modal"
+      style="
+        display: none;
+        background-image: url('bluepure.jpg');
+        background-size: cover;
+      "
+    >
+      <div class="grid"></div>
+      <div id="text1" class="textContainer">
+        Find the block which accepts sequenceLength as input.
+      </div>
+      <div id="text2" class="textContainer">
+        Change the sequenceLength as shown here.
+      </div>
+      <div id="arrow1" class="arrowContainer"></div>
+      <div id="arrow2" class="arrowContainer"></div>
+      <div
+        class="instructionimage"
+        style="
+          background-image: url('MemoryGame2.png');
+          background-size: cover;
+          background-repeat: no-repeat;
+        "
+      ></div>
+      <div
+        class="instructiongif"
+        style="
+          background-image: url('sequenceLengthGIF.gif');
+          background-size: cover;
+          background-repeat: no-repeat;
+        "
+      ></div>
+      <div class="titlecontainer">Length of sequence</div>
+      <img
+        id="returnButton"
+        src="return.png"
+        alt="Return Button"
+        width="40"
+        height="40"
+      />
+    </div>
 
-</div>
+    <div
+      id="greenModal"
+      class="modal"
+      style="
+        display: none;
+        background-image: url('greenPure.jpg');
+        background-size: cover;
+      "
+    >
+      <div class="grid"></div>
+      <div id="text1" class="textContainer">Find the block which accepts the sequenceSpeed as input.</div>
+      <div id="text2" class="textContainer">Change the sequenceSpeed as show here.</div>
+      <div id="arrow1" class="arrowContainer"></div>
+      <div id="arrow2" class="arrowContainer"></div>
+      <div
+        class="instructionimage"
+        style="
+          background-image: url('MemoryGame2.png');
+          background-size: cover;
+          background-repeat: no-repeat;
+        "
+      ></div>
+      <div
+        class="instructiongif"
+        style="
+          background-image: url('sequenceSpeedGIF.gif');
+          background-size: cover;
+          background-repeat: no-repeat;
+        "
+      ></div>
+      <div class="titlecontainer">Speed of sequence</div>
+      <img
+        id="returnButton"
+        src="return.png"
+        alt="Return Button"
+        width="40"
+        height="40"
+      />
+    </div>
 
-<div id="blueModal" class="modal" style="display: none; background-image: url('bluepure.jpg');background-size: cover;">
+    <div
+      id="pinkModal"
+      class="modal"
+      style="
+        display: none;
+        background-image: url('pinkpure.jpg');
+        background-size: cover;
+      "
+    >
+      <div class="grid"></div>
+      <div id="text1" class="textContainer">Text 1</div>
+      <div id="text2" class="textContainer">Text 2</div>
+      <div id="arrow1" class="arrowContainer"></div>
+      <div id="arrow2" class="arrowContainer"></div>
+      <div
+        class="bluecontainer"
+        style="
+          background-image: url('blocks.jpg');
+          background-size: cover;
+          background-repeat: no-repeat;
+        "
+      ></div>
+      <div
+        class="pinkcontainer"
+        style="
+          background-image: url('blocksgif.gif');
+          background-size: cover;
+          background-repeat: no-repeat;
+        "
+      ></div>
+      <div class="titlecontainer">Feedback Sequence</div>
+      <img
+        id="returnButton"
+        src="return.png"
+        alt="Return Button"
+        width="40"
+        height="40"
+      />
+    </div>
 
-    <div class="grid"></div>
-    <div id="text1" class="textContainer">Text 1</div>
-    <div id="text2" class="textContainer">Text 2</div>
-    <div id="text3" class="textContainer">Text 3</div>
-    <div id="arrow1" class="arrowContainer"></div>
-    <div id="arrow2" class="arrowContainer"></div>
-    <div id="arrow3" class="arrowContainer"></div>
-    <div class="bluecontainer" style="background-image: url('blocks.jpg'); background-size: cover; background-repeat: no-repeat;"></div>
-    <div class="pinkcontainer" style="background-image: url('blocksgif.gif'); background-size: cover; background-repeat: no-repeat;"></div>
-    <div class="titlecontainer">Length of sequence</div>
-    <img id= "returnButton" src="return.png" alt="Return Button" width="40" height="40">
-
-
-
-</div>
-    
     <script>
       let timerInterval;
       let score = 0;
@@ -937,8 +1199,8 @@
       let isIconClicked = false;
 
       function timerClick() {
-        const timerButton = document.getElementById('timerButton');
-        const claimIcon = document.getElementById('claimIcon');
+        const timerButton = document.getElementById("timerButton");
+        const claimIcon = document.getElementById("claimIcon");
 
         if (!isTimerRunning) {
           if (remainingTime <= 0) {
@@ -946,34 +1208,31 @@
           }
 
           timerInterval = setInterval(() => {
-              let minutes = Math.floor(remainingTime / 60);
-              let seconds = remainingTime % 60;
-              seconds = seconds < 10 ? '0' + seconds : seconds;
-              timerButton.textContent = `${minutes}:${seconds} remaining`;
+            let minutes = Math.floor(remainingTime / 60);
+            let seconds = remainingTime % 60;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            timerButton.textContent = `${minutes}:${seconds} remaining`;
 
-              remainingTime--;
+            remainingTime--;
 
-              if (remainingTime < 0) {
-                clearInterval(timerInterval);
-                isTimerRunning = false;
-                if (block_dragged == true) {
-                  claimIcon.style.display = 'block';
-                  timerButton.disabled = true;
-                  isIconClicked = false;
-                } else {
-                  remainingTime = 10;
-                  timerClick();
-
-                }
-                claimIcon.addEventListener('click', scoreClaimed);
+            if (remainingTime < 0) {
+              clearInterval(timerInterval);
+              isTimerRunning = false;
+              if (block_dragged == true) {
+                claimIcon.style.display = "block";
+                timerButton.disabled = true;
+                isIconClicked = false;
+              } else {
+                remainingTime = 10;
+                timerClick();
               }
+              claimIcon.addEventListener("click", scoreClaimed);
+            }
           }, 1000);
-              
+
           isTimerRunning = true;
-              
-              
         } else {
-          if (claimIcon.style.display === 'none') {
+          if (claimIcon.style.display === "none") {
             clearInterval(timerInterval);
             timerButton.textContent = "Resume Timer";
             isTimerRunning = false;
@@ -982,47 +1241,45 @@
       }
 
       function scoreClaimed() {
-        const currentScore = document.getElementById('CurrentScore');
+        const currentScore = document.getElementById("CurrentScore");
         score += 100;
         currentScore.textContent = "Current Score: " + score;
-        const claimIcon = document.getElementById('claimIcon');
-        claimIcon.style.display = 'none';
-        const timerButton = document.getElementById('timerButton');
+        const claimIcon = document.getElementById("claimIcon");
+        claimIcon.style.display = "none";
+        const timerButton = document.getElementById("timerButton");
         timerButton.disabled = false;
         block_dragged = false;
         // Reset and restart the timer
         remainingTime = 10;
         timerClick();
-        }
+      }
 
       function stopSession() {
-        claimIcon.style.display = 'none';
+        claimIcon.style.display = "none";
 
         clearInterval(timerInterval);
         isTimerRunning = false;
         remainingTime = 10;
-        const timerButton = document.getElementById('timerButton');
-        const currentScore = document.getElementById('CurrentScore');
-        const highScore = document.getElementById('HighScore');
+        const timerButton = document.getElementById("timerButton");
+        const currentScore = document.getElementById("CurrentScore");
+        const highScore = document.getElementById("HighScore");
         timerButton.textContent = "Start timer";
         var highscore = getHighScore();
         if (score > highscore) {
-            saveHighScore(score);
-            highScore.textContent = "High Score: " + score;
+          saveHighScore(score);
+          highScore.textContent = "High Score: " + score;
         }
         score = 0;
         currentScore.textContent = "Current Score: " + score;
         timerButton.disabled = false;
-      }  
-
-      function clearhighscore(){
-        const highScore = document.getElementById('HighScore');
-        saveHighScore(0);
-        highscore = getHighScore()
-        highScore.textContent = "High Score: " + highscore;
       }
 
-
+      function clearhighscore() {
+        const highScore = document.getElementById("HighScore");
+        saveHighScore(0);
+        highscore = getHighScore();
+        highScore.textContent = "High Score: " + highscore;
+      }
     </script>
   </body>
-  </html>
+</html>

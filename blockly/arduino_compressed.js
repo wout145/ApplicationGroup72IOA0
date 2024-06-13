@@ -883,6 +883,10 @@ Blockly.Arduino.variables_set = function () {
 };
 
 Blockly.Arduino['declarations1'] = function(block) {
+
+  var value_sequenceLength = Blockly.Arduino.valueToCode(block, 'sequenceLength', Blockly.Arduino.ORDER_ATOMIC);
+  var value_sequenceSpeed = Blockly.Arduino.valueToCode(block, 'sequenceSpeed', Blockly.Arduino.ORDER_ATOMIC);
+
   var code = `
 #include "LiquidCrystal_I2C.h"
 
@@ -906,8 +910,8 @@ bool buttonPressed[4] = {false, false, false, false};
 int currentPress = 0;
 bool gameStarted = false;
 
-int sequenceLength = 3;
-int TimeBetweenLights = 500;
+int sequenceLength = ` + value_sequenceLength + `;
+int TimeBetweenLights = ` + value_sequenceSpeed + `;
 int WhichLightShouldBlinkCorrect = 1;
 int AmountOfBlinksCorrect = 10;
 int HowLongEachBlinkCorrect = 350;
@@ -916,7 +920,9 @@ int AmountOfBlinksWrong = 10;
 int HowLongEachBlinkWrong = 350;
   `;
 
-  Blockly.Arduino.definitions_['global_variables'] = code;
+  Blockly.Arduino.definitions_['declarations1'] = code;
+
+
   return '';
 };
 
@@ -1028,19 +1034,10 @@ void generateRandomSequence() {
   }  
 }
   `;
-  return code;
-}
 
+  Blockly.Arduino.definitions_.generateRandomSequence = code;
 
-Blockly.Arduino['generateRandomSequence'] = function(block) {
-  var code = `
-void generateRandomSequence() {
-  for (int i = 0; i < sequenceLength; i++) {
-    randomSequence[i] = random(0, 4);
-  }  
-}
-  `;
-  return code;
+  return '';
 }
 
 Blockly.Arduino['showSequence'] = function(block) {
@@ -1059,7 +1056,9 @@ void showSequence() {
 }
   `;
 
-  return code;
+  Blockly.Arduino.definitions_.showSequence = code;
+
+  return '';
 }
 
 Blockly.Arduino['readButtons'] = function(block) {
@@ -1080,7 +1079,9 @@ void readButtons() {
 }
   `;
 
-  return code;
+  Blockly.Arduino.definitions_.readButtons = code;
+
+  return '';
 }
 
 Blockly.Arduino['checkSequence'] = function(block) {
@@ -1098,7 +1099,9 @@ bool checkSequence() {
 
   `;
 
-  return code;
+  Blockly.Arduino.definitions_.checkSequence = code;
+
+  return '';
 }
 
 Blockly.Arduino['blinkAllLeds'] = function(block) {
@@ -1120,7 +1123,10 @@ void blinkAllLeds(int times, int duration) {
   
 }
   `;
-  return code;
+
+  Blockly.Arduino.definitions_.blinkAllLeds = code;
+
+  return '';
 }
 
 Blockly.Arduino['blinkLed'] = function(block) {
@@ -1140,7 +1146,8 @@ void blinkLed(int ledNr, int times, int duration) {
 }
   `;
 
-  return code;
+  Blockly.Arduino.definitions_.blinkLed = code;
+  return '';
 }
 
 Blockly.Arduino['askForAnotherRound'] = function(block) {
@@ -1174,7 +1181,9 @@ void askForAnotherRound() {
 }
   `;
 
-  return code;
+  Blockly.Arduino.definitions_.askForAnotherRound = code;
+
+  return '';
 }
 
 Blockly.Arduino['sequenceCountdown'] = function(block) {
@@ -1201,5 +1210,359 @@ void SequenceCountDown() {
   
   `;
 
+  Blockly.Arduino.definitions_.sequenceCountdown = code;
+
+  return '';
+}
+
+Blockly.Arduino['mainSetup'] = function(block) {
+  var code = `
+  // Initialize LCD and turn on the backlight:
+  lcd.init();
+  lcd.backlight();
+  lcd.clear();
+  
+    // Setting up LEDs and buttons
+  for (int i = 0; i < 4; i++) {
+    pinMode(ledPins[i], OUTPUT);
+    pinMode(buttonPins[i], INPUT);
+  }
+
+    lcd.setCursor(0, 0); // Set cursor to the first column of the first row
+    lcd.print("Welcome to");
+    lcd.setCursor(0, 1); // Set cursor to the first column of the second row
+    lcd.print("Memory game 1!");
+    Serial.begin(9600);
+    randomSeed(analogRead(0));
+	delay(2000); // Wait for 2 seconds
+  
+      //askForSequenceLength();
+   
+  `;
+
+  Blockly.Arduino.setups_['mainSetup'] = code;
+
+  return '';
+
+}
+
+Blockly.Arduino['declarations2'] = function(block) {
+
+  var value_sequenceLength = Blockly.Arduino.valueToCode(block, 'sequenceLength', Blockly.Arduino.ORDER_ATOMIC);
+  var value_sequenceSpeed = Blockly.Arduino.valueToCode(block, 'sequenceSpeed', Blockly.Arduino.ORDER_ATOMIC);
+
+  var code = `
+#include "LiquidCrystal_I2C.h"
+
+LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 16, 2);
+
+#define LED1 A0
+#define LED2 A1
+#define LED3 A2
+#define LED4 A3
+#define BUTTON1 5
+#define BUTTON2 4
+#define BUTTON3 3
+#define BUTTON4 2
+
+
+//BLOCKS TO BUILD
+const int sequenceLength = `+ value_sequenceLength + `; 
+int TimeBetweenLights = `+ value_sequenceSpeed + `;
+
+
+//Reward if correct
+int WhichLightShouldBlinkCorrect = 5;
+int AmountOfBlinksCorrect = 10;
+int HowLongEachBlinkCorrect = 350;
+
+//Reward if wrong
+int WhichLightShouldBlinkWrong = 4;
+int AmountOfBlinksWrong = 10;
+int HowLongEachBlinkWrong = 350;
+
+
+int ledPins[4] = {LED1, LED2, LED3, LED4};
+int buttonPins[4] = {BUTTON1, BUTTON2, BUTTON3, BUTTON4};
+int userSequence[sequenceLength];
+int ledSequence[sequenceLength];
+bool buttonPressed[4] = {false, false, false, false};
+int currentPress = 0;
+bool gameStarted = false;
+int wrongLedSequence;
+
+  `;
+
+  Blockly.Arduino.definitions_['declarations2'] = code;
+
+  return '';
+};
+
+Blockly.Arduino['mainSetup2'] = function(block) {
+  var code = `
+  // Setting up LEDs and buttons
+  for (int i = 0; i < 4; i++) {
+    pinMode(ledPins[i], OUTPUT);
+    pinMode(buttonPins[i], INPUT);
+  }
+  
+  lcd.init();
+  lcd.backlight();
+  lcd.clear();
+  lcd.print("Welcome to");
+  lcd.setCursor(0, 1); // Set cursor to the first column of the second row
+  lcd.print("Memory game 2!");
+  delay(3000);
+  lcd.clear();
+  
+  lcd.print("Chosen sequence-");
+  lcd.setCursor(0, 1);
+  lcd.print("length = ");
+  lcd.print(sequenceLength);
+  
+  delay(3000);
+  lcd.clear();
+  
+  lcd.print("Press left");
+  lcd.setCursor(0, 1);
+  lcd.print("button to start!");
+  Serial.begin(9600);
+  randomSeed(analogRead(0));
+  `;
+
+  Blockly.Arduino.setups_['mainSetup2'] = code;
+
+  return '';
+}
+
+Blockly.Arduino['mainLoop2'] = function(block) {
+  var code = `
+  if (!gameStarted && digitalRead(BUTTON1) == HIGH) {
+    delay(200); // Debounce delay
+    while (digitalRead(BUTTON1) == HIGH); // Wait for button release
+    gameStarted = true;
+    
+    
+    lcd.clear();
+    lcd.print("Enter your ");
+    lcd.setCursor(0, 1);
+    lcd.print("sequence now!");
+     
+    
+    getButtonSequence();
+    createLedSequence();
+    delay(500);
+    showLedSequence();
+    waitForUserResponse();
+  }
+
+`;
+
   return code;
+}
+
+Blockly.Arduino['getButtonSequence'] = function(block) {
+  var code = `
+  
+void getButtonSequence() {
+  delay(10);
+  currentPress = 0;
+  while (currentPress < sequenceLength) {
+    for (int i = 0; i < 4; i++) {
+      if (digitalRead(buttonPins[i]) == HIGH && !buttonPressed[i]) {
+        buttonPressed[i] = true;
+        userSequence[currentPress] = i;
+        currentPress++;
+        delay(200); // Debounce delay
+      } else if (digitalRead(buttonPins[i]) == LOW) {
+        buttonPressed[i] = false;
+      }
+    }
+  }
+}`;
+
+Blockly.Arduino.definitions_.getButtonSequence = code;
+
+return '';
+}
+
+Blockly.Arduino['createLedSequence'] = function(block) {
+  var code = `
+void createLedSequence() {
+  for (int i = 0; i < sequenceLength; i++) {
+    ledSequence[i] = userSequence[i];
+  }
+  
+  wrongLedSequence = random(0, 2);
+  
+  if (wrongLedSequence == 1) {
+    int wrongLedNr = random(0, sequenceLength);
+    int wrongLedValue = random(0, 4);
+    if (userSequence[wrongLedNr] == wrongLedValue) {
+      wrongLedValue = (wrongLedValue + 1) % 4;
+    }
+
+    ledSequence[wrongLedNr] = wrongLedValue; 
+  }
+}`;
+
+Blockly.Arduino.definitions_.createLedSequence = code;
+
+return '';
+}
+
+Blockly.Arduino['showLedSequence'] = function(block) {
+  var code = `
+void showLedSequence() {
+  
+  
+  lcd.clear();
+  lcd.print("Got it!");
+  delay(2000);
+  lcd.clear();
+  lcd.print("Showing sequence");
+  lcd.setCursor(0, 1); // Set cursor to the first column of the second row
+  lcd.print("in...");
+  delay(1500);
+  lcd.clear();
+  lcd.print("3...");
+  delay(1000);
+  lcd.clear();
+  lcd.print("2...");
+  delay(1000);
+  lcd.clear();
+  lcd.print("1...");
+  delay(1000);
+  lcd.clear();
+  delay(1000);
+
+  
+  for (int i = 0; i < sequenceLength; i++) {
+    digitalWrite(ledPins[ledSequence[i]], HIGH);
+    delay(TimeBetweenLights);
+    digitalWrite(ledPins[ledSequence[i]], LOW);
+    delay(TimeBetweenLights);
+  }
+  delay(500);
+}`;
+
+Blockly.Arduino.definitions_.showLedSequence = code;
+
+return '';
+}
+
+Blockly.Arduino['waitForUserResponse'] = function(block) {
+  var code = `
+void waitForUserResponse() {
+  lcd.clear();
+  lcd.print("Left if correct");
+  lcd.setCursor(0, 1);
+  lcd.print("Right if wrong");
+
+  while (true) {
+    if (digitalRead(BUTTON1) == HIGH) {
+      if (wrongLedSequence == 0) {
+        lcd.clear();
+        delay(500);
+        lcd.print("That was");
+        lcd.setCursor(0,1);
+        lcd.print("correct!");
+       
+        
+        if (WhichLightShouldBlinkCorrect == 1){
+          blinkLed(LED1, AmountOfBlinksCorrect, HowLongEachBlinkCorrect);
+          }
+        else if (WhichLightShouldBlinkCorrect == 2){
+          blinkLed(LED2, AmountOfBlinksCorrect, HowLongEachBlinkCorrect);
+          }
+        
+        else if (WhichLightShouldBlinkCorrect == 3){
+          blinkLed(LED3, AmountOfBlinksCorrect, HowLongEachBlinkCorrect);
+          }
+        
+        else if (WhichLightShouldBlinkCorrect == 4){
+          blinkLed(LED4, AmountOfBlinksCorrect, HowLongEachBlinkCorrect);
+          }        
+        else {
+          blinkAllLeds(AmountOfBlinksCorrect, HowLongEachBlinkCorrect);       
+      	  }
+        
+  
+      } else {
+        lcd.clear();
+        delay(500);
+        lcd.print("That was");
+        lcd.setCursor(0,1);
+        lcd.print("wrong...");
+        
+        
+        if (WhichLightShouldBlinkWrong == 1){
+          blinkLed(LED1, AmountOfBlinksWrong, HowLongEachBlinkWrong);
+          }
+        else if (WhichLightShouldBlinkWrong == 2){
+          blinkLed(LED2, AmountOfBlinksWrong, HowLongEachBlinkWrong);
+          }
+        
+        else if (WhichLightShouldBlinkWrong == 3){
+          blinkLed(LED3, AmountOfBlinksWrong, HowLongEachBlinkWrong);
+          }
+        
+        else if (WhichLightShouldBlinkWrong == 4){
+          blinkLed(LED4, AmountOfBlinksWrong, HowLongEachBlinkWrong);
+          }        
+        else {
+          blinkAllLeds(AmountOfBlinksWrong, HowLongEachBlinkWrong);       
+      	  }
+        
+        
+      }
+      break;
+    } else if (digitalRead(BUTTON4) == HIGH) {
+      if (wrongLedSequence == 1) {
+        lcd.clear();
+        lcd.print("That was");
+        lcd.setCursor(0,1);
+        lcd.print("correct!");
+        blinkAllLeds(AmountOfBlinksCorrect, HowLongEachBlinkCorrect);
+      } else {
+        lcd.clear();
+        lcd.print("That was");
+        lcd.setCursor(0,1);
+        lcd.print("wrong...");
+        blinkLed(1, 1, 1000);
+      }
+      break;
+    }
+  }
+
+  lcd.clear();
+  lcd.print("Play again?");
+  lcd.setCursor(0, 1);
+  lcd.print("left=y, right=n");
+
+  while (true) {
+    if (digitalRead(BUTTON1) == HIGH) {
+      delay(200); // Debounce delay
+      while (digitalRead(BUTTON1) == HIGH); // Wait for button release
+      currentPress = 0;
+      for (int i = 0; i < 4; i++) {
+        buttonPressed[i] = false;
+      }
+      gameStarted = false;
+      lcd.clear();
+      lcd.print("Press left btn");
+      lcd.setCursor(0, 1);
+      lcd.print("to start");
+      break;
+    } else if (digitalRead(BUTTON4) == HIGH) {
+      lcd.clear();
+      lcd.print("Game Over!");
+      while (true); 
+    }
+  }
+}`;
+
+Blockly.Arduino.definitions_.waitForUserResponse = code;
+
+return '';
 }
