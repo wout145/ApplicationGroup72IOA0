@@ -3173,12 +3173,16 @@ Blockly.Blocks['sequenceCountdown'] = {
 Blockly.Blocks['mainLoop'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Main Loop contents 1");
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
+        .appendField("Main Loop Contents 1");
+    this.appendStatementInput("correctFeedbackSequence")
+        .appendField("Correct Feedback Sequence:");
+    this.appendStatementInput("wrongFeedbackSequence")
+        .appendField("Wrong Feedback Sequence:");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('');
+    this.setHelpUrl('');
     this.setColour(300);
- this.setTooltip("Dummy Block");
- this.setHelpUrl("");
   }
 };
 
@@ -3281,5 +3285,44 @@ Blockly.Blocks['waitForUserResponse'] = {
     this.setColour(230);
  this.setTooltip("");
  this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['useblinkled'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Use blinkLed()");
+    this.appendValueInput("blinkLedLed")
+        .setCheck("Number")
+        .appendField("Which Led? (0-4)");
+    this.appendValueInput("blinkLedTimes")
+        .setCheck("Number")
+        .appendField("How many times?");
+    this.appendValueInput("blinkLedDuration")
+        .setCheck("Number")
+        .appendField("For how long? (ms)");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(20);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['useblinkallleds'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Use blinkAllLeds()");
+    this.appendValueInput("blinkAllLedsTimes")
+        .setCheck("Number")
+        .appendField("How many times?");
+    this.appendValueInput("blinkAllLedsDuration")
+        .setCheck("Number")
+        .appendField("For how long? (ms)");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(20);
+    this.setTooltip('');
+    this.setHelpUrl('');
   }
 };

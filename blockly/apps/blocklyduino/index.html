@@ -652,18 +652,18 @@
       }
 
       #text2 {
-        top: 58%;
+        top: 54%;
       }
 
       #text3 {
-        top: 45%;
+        top: 78%;
       }
       #arrow1 {
         top: 33%;
       }
 
       #arrow2 {
-        top: 66%;
+        top: 60%;
       }
 
       #arrow3 {
@@ -1005,6 +1005,35 @@
         <block type="askForAnotherRound"></block>
         <block type="mainSetup"></block>
         <block type="mainLoop"></block>
+        <block type="useblinkled">
+          <value name="blinkLedLed">
+            <block type="math_number">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+          <value name="blinkLedTimes">
+            <block type="math_number">
+              <field name="NUM">5</field>
+            </block>
+          </value>
+          <value name="blinkLedDuration">
+            <block type="math_number">
+              <field name="NUM">500</field>
+            </block>
+          </value>
+        </block>
+        <block type="useblinkallleds">
+          <value name="blinkAllLedsTimes">
+            <block type="math_number">
+              <field name="NUM">3</field>
+            </block>
+          </value>
+          <value name="blinkAllLedsDuration">
+            <block type="math_number">
+              <field name="NUM">500</field>
+            </block>
+          </value>
+        </block>
       </category>
       <category name="Memory Game 2">
         <block type="declarations2">
@@ -1077,10 +1106,13 @@
     >
       <div class="grid"></div>
       <div id="text1" class="textContainer">
-        Find the block which accepts sequenceLength as input.
+        Find the block which programs the sequence length!
       </div>
       <div id="text2" class="textContainer">
-        Change the sequenceLength as shown here.
+        Type the number like this:
+      </div>
+      <div id="text3" class="textContainer">
+        How many lights can you remember?
       </div>
       <div id="arrow1" class="arrowContainer"></div>
       <div id="arrow2" class="arrowContainer"></div>
@@ -1120,8 +1152,9 @@
       "
     >
       <div class="grid"></div>
-      <div id="text1" class="textContainer">Find the block which accepts the sequenceSpeed as input.</div>
-      <div id="text2" class="textContainer">Change the sequenceSpeed as show here.</div>
+      <div id="text1" class="textContainer">Find which block programs the sequence speed!</div>
+      <div id="text2" class="textContainer">Enter your wanted LED-speed like this:</div>
+      <div id="text3" class="textContainer">Remember, the time is in milliseconds, so 500ms = 0.5 second!</div>
       <div id="arrow1" class="arrowContainer"></div>
       <div id="arrow2" class="arrowContainer"></div>
       <div

@@ -927,7 +927,12 @@ int HowLongEachBlinkWrong = 350;
 };
 
 Blockly.Arduino['mainLoop'] = function(block) {
+ 
+  var value_correctFeedbackSequence = Blockly.Arduino.statementToCode(block, 'correctFeedbackSequence');
+  var value_wrongFeedbackSequence = Blockly.Arduino.statementToCode(block, 'wrongFeedbackSequence');
+  
   var code = `
+
     
   if (sequenceLength > 0) {
     sequenceLength = sequenceLength;
@@ -967,26 +972,8 @@ Blockly.Arduino['mainLoop'] = function(block) {
         lcd.setCursor(0,1);
         lcd.print("correct!");
         
-        
-        
-        if (WhichLightShouldBlinkCorrect == 1){
-          blinkLed(LED1, AmountOfBlinksCorrect, HowLongEachBlinkCorrect);
-          }
-        else if (WhichLightShouldBlinkCorrect == 2){
-          blinkLed(LED2, AmountOfBlinksCorrect, HowLongEachBlinkCorrect);
-          }
-        
-        else if (WhichLightShouldBlinkCorrect == 3){
-          blinkLed(LED3, AmountOfBlinksCorrect, HowLongEachBlinkCorrect);
-          }
-        
-        else if (WhichLightShouldBlinkCorrect == 4){
-          blinkLed(LED4, AmountOfBlinksCorrect, HowLongEachBlinkCorrect);
-          }        
-        else {
-          blinkAllLeds(AmountOfBlinksCorrect, HowLongEachBlinkCorrect);       
-      	  }
-        
+        `+ value_correctFeedbackSequence +`       
+
         askForAnotherRound();
         
         
@@ -998,30 +985,11 @@ Blockly.Arduino['mainLoop'] = function(block) {
         lcd.setCursor(0,1);
         lcd.print("wrong...");
         
-        if (WhichLightShouldBlinkWrong == 1){
-          blinkLed(LED1, AmountOfBlinksWrong, HowLongEachBlinkWrong);
-          }
-        else if (WhichLightShouldBlinkWrong == 2){
-          blinkLed(LED2, AmountOfBlinksWrong, HowLongEachBlinkWrong);
-          }
-        
-        else if (WhichLightShouldBlinkWrong == 3){
-          blinkLed(LED3, AmountOfBlinksWrong, HowLongEachBlinkWrong);
-          }
-        
-        else if (WhichLightShouldBlinkWrong == 4){
-          blinkLed(LED4, AmountOfBlinksWrong, HowLongEachBlinkWrong);
-          }        
-        else {
-          blinkAllLeds(AmountOfBlinksWrong, HowLongEachBlinkWrong);       
-      	  }
-        
-        askForAnotherRound();
-      	        
-      }
-      
-    } 
+        `+ value_wrongFeedbackSequence +`  
 
+        askForAnotherRound();
+      }
+    } 
   }  `;
     return code;
 }
@@ -1566,3 +1534,25 @@ Blockly.Arduino.definitions_.waitForUserResponse = code;
 
 return '';
 }
+
+Blockly.Arduino['useblinkled'] = function(block) {
+  var value_blinkledled = Blockly.Arduino.valueToCode(block, 'blinkLedLed', Blockly.Arduino.ORDER_ATOMIC);
+  var value_blinkledtimes = Blockly.Arduino.valueToCode(block, 'blinkLedTimes', Blockly.Arduino.ORDER_ATOMIC);
+  var value_blinkledduration = Blockly.Arduino.valueToCode(block, 'blinkLedDuration', Blockly.Arduino.ORDER_ATOMIC);
+  
+  var code = `
+  blinkLed(ledPins[`+value_blinkledled+`], `+value_blinkledtimes+`,`+value_blinkledduration+` );
+  `;
+
+  return code;
+};
+
+Blockly.Arduino['useblinkallleds'] = function(block) {
+  var value_blinkallledstimes = Blockly.Arduino.valueToCode(block, 'blinkAllLedsTimes', Blockly.Arduino.ORDER_ATOMIC);
+  var value_blinkallledsduration = Blockly.Arduino.valueToCode(block, 'blinkAllLedsDuration', Blockly.Arduino.ORDER_ATOMIC);
+  
+  var code = `
+  blinkAllLeds(`+value_blinkallledstimes+`,`+value_blinkallledsduration+` );
+  `;
+  return code;
+};
