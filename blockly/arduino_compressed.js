@@ -1304,6 +1304,9 @@ Blockly.Arduino['mainSetup2'] = function(block) {
 }
 
 Blockly.Arduino['mainLoop2'] = function(block) {
+  var value_correctFeedbackSequence = Blockly.Arduino.statementToCode(block, 'correctFeedbackSequence');
+  var value_wrongFeedbackSequence = Blockly.Arduino.statementToCode(block, 'wrongFeedbackSequence');
+  
   var code = `
   if (!gameStarted && digitalRead(BUTTON1) == HIGH) {
     delay(200); // Debounce delay
@@ -1321,8 +1324,84 @@ Blockly.Arduino['mainLoop2'] = function(block) {
     createLedSequence();
     delay(500);
     showLedSequence();
-    waitForUserResponse();
+      lcd.clear();
+  lcd.print("Left if correct");
+  lcd.setCursor(0, 1);
+  lcd.print("Right if wrong");
+
+  while (true) {
+    if (digitalRead(BUTTON1) == HIGH) {
+      if (wrongLedSequence == 0) {
+        lcd.clear();
+        delay(500);
+        lcd.print("That was");
+        lcd.setCursor(0,1);
+        lcd.print("correct!");
+       
+        `+value_correctFeedbackSequence+`
+        
+  
+      } else {
+        lcd.clear();
+        delay(500);
+        lcd.print("That was");
+        lcd.setCursor(0,1);
+        lcd.print("wrong...");
+        
+        `+value_wrongFeedbackSequence+`
+        
+        
+      }
+      break;
+    } else if (digitalRead(BUTTON4) == HIGH) {
+      if (wrongLedSequence == 1) {
+        lcd.clear();
+        lcd.print("That was");
+        lcd.setCursor(0,1);
+        lcd.print("correct!");
+        blinkAllLeds(AmountOfBlinksCorrect, HowLongEachBlinkCorrect);
+      } else {
+        lcd.clear();
+        lcd.print("That was");
+        lcd.setCursor(0,1);
+        lcd.print("wrong...");
+        blinkLed(1, 1, 1000);
+      }
+      break;
+    }
   }
+
+  lcd.clear();
+  lcd.print("Play again?");
+  lcd.setCursor(0, 1);
+  lcd.print("left=y, right=n");
+
+  while (true) {
+    if (digitalRead(BUTTON1) == HIGH) {
+      delay(200); // Debounce delay
+      while (digitalRead(BUTTON1) == HIGH); // Wait for button release
+      currentPress = 0;
+      for (int i = 0; i < 4; i++) {
+        buttonPressed[i] = false;
+      }
+      gameStarted = false;
+      lcd.clear();
+      lcd.print("Press left btn");
+      lcd.setCursor(0, 1);
+      lcd.print("to start");
+      break;
+    } else if (digitalRead(BUTTON4) == HIGH) {
+      lcd.clear();
+      lcd.print("Game Over!");
+      while (true); 
+    }
+  }
+    
+    
+    
+    
+  }
+  
 
 `;
 
@@ -1419,121 +1498,6 @@ Blockly.Arduino.definitions_.showLedSequence = code;
 return '';
 }
 
-Blockly.Arduino['waitForUserResponse'] = function(block) {
-  var code = `
-void waitForUserResponse() {
-  lcd.clear();
-  lcd.print("Left if correct");
-  lcd.setCursor(0, 1);
-  lcd.print("Right if wrong");
-
-  while (true) {
-    if (digitalRead(BUTTON1) == HIGH) {
-      if (wrongLedSequence == 0) {
-        lcd.clear();
-        delay(500);
-        lcd.print("That was");
-        lcd.setCursor(0,1);
-        lcd.print("correct!");
-       
-        
-        if (WhichLightShouldBlinkCorrect == 1){
-          blinkLed(LED1, AmountOfBlinksCorrect, HowLongEachBlinkCorrect);
-          }
-        else if (WhichLightShouldBlinkCorrect == 2){
-          blinkLed(LED2, AmountOfBlinksCorrect, HowLongEachBlinkCorrect);
-          }
-        
-        else if (WhichLightShouldBlinkCorrect == 3){
-          blinkLed(LED3, AmountOfBlinksCorrect, HowLongEachBlinkCorrect);
-          }
-        
-        else if (WhichLightShouldBlinkCorrect == 4){
-          blinkLed(LED4, AmountOfBlinksCorrect, HowLongEachBlinkCorrect);
-          }        
-        else {
-          blinkAllLeds(AmountOfBlinksCorrect, HowLongEachBlinkCorrect);       
-      	  }
-        
-  
-      } else {
-        lcd.clear();
-        delay(500);
-        lcd.print("That was");
-        lcd.setCursor(0,1);
-        lcd.print("wrong...");
-        
-        
-        if (WhichLightShouldBlinkWrong == 1){
-          blinkLed(LED1, AmountOfBlinksWrong, HowLongEachBlinkWrong);
-          }
-        else if (WhichLightShouldBlinkWrong == 2){
-          blinkLed(LED2, AmountOfBlinksWrong, HowLongEachBlinkWrong);
-          }
-        
-        else if (WhichLightShouldBlinkWrong == 3){
-          blinkLed(LED3, AmountOfBlinksWrong, HowLongEachBlinkWrong);
-          }
-        
-        else if (WhichLightShouldBlinkWrong == 4){
-          blinkLed(LED4, AmountOfBlinksWrong, HowLongEachBlinkWrong);
-          }        
-        else {
-          blinkAllLeds(AmountOfBlinksWrong, HowLongEachBlinkWrong);       
-      	  }
-        
-        
-      }
-      break;
-    } else if (digitalRead(BUTTON4) == HIGH) {
-      if (wrongLedSequence == 1) {
-        lcd.clear();
-        lcd.print("That was");
-        lcd.setCursor(0,1);
-        lcd.print("correct!");
-        blinkAllLeds(AmountOfBlinksCorrect, HowLongEachBlinkCorrect);
-      } else {
-        lcd.clear();
-        lcd.print("That was");
-        lcd.setCursor(0,1);
-        lcd.print("wrong...");
-        blinkLed(1, 1, 1000);
-      }
-      break;
-    }
-  }
-
-  lcd.clear();
-  lcd.print("Play again?");
-  lcd.setCursor(0, 1);
-  lcd.print("left=y, right=n");
-
-  while (true) {
-    if (digitalRead(BUTTON1) == HIGH) {
-      delay(200); // Debounce delay
-      while (digitalRead(BUTTON1) == HIGH); // Wait for button release
-      currentPress = 0;
-      for (int i = 0; i < 4; i++) {
-        buttonPressed[i] = false;
-      }
-      gameStarted = false;
-      lcd.clear();
-      lcd.print("Press left btn");
-      lcd.setCursor(0, 1);
-      lcd.print("to start");
-      break;
-    } else if (digitalRead(BUTTON4) == HIGH) {
-      lcd.clear();
-      lcd.print("Game Over!");
-      while (true); 
-    }
-  }
-}`;
-
-Blockly.Arduino.definitions_.waitForUserResponse = code;
-
-return '';
-}
 
 Blockly.Arduino['useblinkled'] = function(block) {
   var value_blinkledled = Blockly.Arduino.valueToCode(block, 'blinkLedLed', Blockly.Arduino.ORDER_ATOMIC);

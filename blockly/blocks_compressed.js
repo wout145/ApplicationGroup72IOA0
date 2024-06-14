@@ -3058,27 +3058,28 @@ Blockly.Blocks.variables_set = {
 Blockly.Blocks['declarations1'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Declare variables Memory Game 1");
+        .appendField("VariableBlock Memory Game 1");
     this.appendValueInput("sequenceLength")
         .setCheck("Number")
-        .appendField("sequenceLength");
+        .appendField("Sequence Length");
     this.appendValueInput("sequenceSpeed")
         .setCheck("Number")
-        .appendField("sequenceSpeed");
+        .appendField("LED light up speed");
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('');
     this.setHelpUrl('');
+    this.setColour(330);
   }
 };
 
 Blockly.Blocks['generateRandomSequence'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Declaration generateRandomSequence()");
+        .appendField("BaseBlock Random LED Sequence 1");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
+    this.setColour(290);
  this.setTooltip("Dummy Block");
  this.setHelpUrl("");
   }
@@ -3087,10 +3088,10 @@ Blockly.Blocks['generateRandomSequence'] = {
 Blockly.Blocks['showSequence'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Declaration showSequence()");
+        .appendField("BaseBlock Show LED Sequence 1");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
+    this.setColour(290);
  this.setTooltip("Dummy Block");
  this.setHelpUrl("");
   }
@@ -3099,10 +3100,10 @@ Blockly.Blocks['showSequence'] = {
 Blockly.Blocks['readButtons'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Declaration readButtons()");
+        .appendField("BaseBlock Read The Buttons 1");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
+    this.setColour(290);
  this.setTooltip("Dummy Block");
  this.setHelpUrl("");
   }
@@ -3111,10 +3112,10 @@ Blockly.Blocks['readButtons'] = {
 Blockly.Blocks['checkSequence'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Declaration checkSequence()");
+        .appendField("BaseBlock Check The Sequence 1");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
+    this.setColour(290);
  this.setTooltip("Dummy Block");
  this.setHelpUrl("");
   }
@@ -3123,10 +3124,10 @@ Blockly.Blocks['checkSequence'] = {
 Blockly.Blocks['blinkAllLeds'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Declaration blinkAllLeds()");
+        .appendField("BaseBlock Blink All LEDs");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
+    this.setColour(290);
  this.setTooltip("Dummy Block");
  this.setHelpUrl("");
   }
@@ -3136,10 +3137,10 @@ Blockly.Blocks['blinkAllLeds'] = {
 Blockly.Blocks['blinkLed'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Declaration blinkLed()");
+        .appendField("BaseBlock Blink One LED");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
+    this.setColour(290);
  this.setTooltip("Dummy Block");
  this.setHelpUrl("");
   }
@@ -3149,10 +3150,10 @@ Blockly.Blocks['blinkLed'] = {
 Blockly.Blocks['askForAnotherRound'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Declaration askForAnotherRound()");
+        .appendField("BaseBlock Ask For Another Round 1");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
+    this.setColour(290);
  this.setTooltip("Dummy Block");
  this.setHelpUrl("");
   }
@@ -3161,10 +3162,10 @@ Blockly.Blocks['askForAnotherRound'] = {
 Blockly.Blocks['sequenceCountdown'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Declaration sequenceCountdown()");
+        .appendField("BaseBlock LCD Countdown 1");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
+    this.setColour(290);
  this.setTooltip("Dummy Block");
  this.setHelpUrl("");
   }
@@ -3173,7 +3174,7 @@ Blockly.Blocks['sequenceCountdown'] = {
 Blockly.Blocks['mainLoop'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Main Loop Contents 1");
+        .appendField("LoopBlock 1");
     this.appendStatementInput("correctFeedbackSequence")
         .appendField("Correct Feedback Sequence:");
     this.appendStatementInput("wrongFeedbackSequence")
@@ -3182,18 +3183,18 @@ Blockly.Blocks['mainLoop'] = {
     this.setNextStatement(true);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.setColour(300);
+    this.setColour(180);
   }
 };
 
 Blockly.Blocks['mainSetup'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Main Setup contents 1");
+        .appendField("SetupBlock 1");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(300);
- this.setTooltip("Dummy Block");
+    this.setColour(180);
+ this.setTooltip("");
  this.setHelpUrl("");
   }
 };
@@ -3201,7 +3202,7 @@ Blockly.Blocks['mainSetup'] = {
 Blockly.Blocks['declarations2'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Declare variables Memory Game 2");
+        .appendField("VariableBlock Memory Game 2");
     this.appendValueInput("sequenceLength")
         .setCheck("Number")
         .appendField("sequenceLength");
@@ -3212,6 +3213,7 @@ Blockly.Blocks['declarations2'] = {
     this.setNextStatement(true);
     this.setTooltip('');
     this.setHelpUrl('');
+    this.setColour(330);
   }
 };
 
@@ -3219,11 +3221,11 @@ Blockly.Blocks['declarations2'] = {
 Blockly.Blocks['mainSetup2'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Main Setup contents 2");
+        .appendField("SetupBlock 2");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(300);
- this.setTooltip("Dummy Block");
+    this.setColour(180);
+ this.setTooltip("");
  this.setHelpUrl("");
   }
 };
@@ -3231,22 +3233,26 @@ Blockly.Blocks['mainSetup2'] = {
 Blockly.Blocks['mainLoop2'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Main Loop contents 2");
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(300);
- this.setTooltip("Dummy Block");
- this.setHelpUrl("");
+        .appendField("LoopBlock 2");
+    this.appendStatementInput("correctFeedbackSequence")
+        .appendField("Correct Feedback Sequence:");
+    this.appendStatementInput("wrongFeedbackSequence")
+        .appendField("Wrong Feedback Sequence:");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(180);
   }
 };
 
 Blockly.Blocks['getButtonSequence'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Declaration getButtonSequence()");
+        .appendField("BaseBlock Read the button sequence 2");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
+    this.setColour(290);
  this.setTooltip("");
  this.setHelpUrl("");
   }
@@ -3255,10 +3261,10 @@ Blockly.Blocks['getButtonSequence'] = {
 Blockly.Blocks['createLedSequence'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Declaration createLedSequence()");
+        .appendField("BaseBlock Create LED Sequence 2");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
+    this.setColour(290);
  this.setTooltip("");
  this.setHelpUrl("");
   }
@@ -3267,34 +3273,23 @@ Blockly.Blocks['createLedSequence'] = {
 Blockly.Blocks['showLedSequence'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Declaration showLedSequence()");
+        .appendField("BaseBlock Show LED Sequence 2");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
+    this.setColour(290);
  this.setTooltip("");
  this.setHelpUrl("");
   }
 };
 
-Blockly.Blocks['waitForUserResponse'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("Declaration waitForUserResponse()");
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(230);
- this.setTooltip("");
- this.setHelpUrl("");
-  }
-};
 
 Blockly.Blocks['useblinkled'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Use blinkLed()");
+        .appendField("Blink One LED");
     this.appendValueInput("blinkLedLed")
         .setCheck("Number")
-        .appendField("Which Led? (0-4)");
+        .appendField("Which Led? (0-3)");
     this.appendValueInput("blinkLedTimes")
         .setCheck("Number")
         .appendField("How many times?");
@@ -3303,7 +3298,7 @@ Blockly.Blocks['useblinkled'] = {
         .appendField("For how long? (ms)");
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setColour(20);
+    this.setColour(120);
     this.setTooltip('');
     this.setHelpUrl('');
   }
@@ -3312,7 +3307,7 @@ Blockly.Blocks['useblinkled'] = {
 Blockly.Blocks['useblinkallleds'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Use blinkAllLeds()");
+        .appendField("Blink All LEDs");
     this.appendValueInput("blinkAllLedsTimes")
         .setCheck("Number")
         .appendField("How many times?");
@@ -3321,7 +3316,7 @@ Blockly.Blocks['useblinkallleds'] = {
         .appendField("For how long? (ms)");
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setColour(20);
+    this.setColour(120);
     this.setTooltip('');
     this.setHelpUrl('');
   }

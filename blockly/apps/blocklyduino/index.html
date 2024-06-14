@@ -519,7 +519,7 @@
         align-items: center;
         top: 20%;
         right: 7.5%;
-        height: 40%;
+        height: 32%;
         width: 55%;
         z-index: 1;
         /*border: 2px solid black; /* Optional */
@@ -530,9 +530,9 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        top: 60%;
+        top: 53%;
         right: 7.5%;
-        height: 40%;
+        height: 46%;
         width: 55%;
         z-index: 1;
         /*border: 2px solid black; /* Optional */
@@ -652,7 +652,7 @@
       }
 
       #text2 {
-        top: 54%;
+        top: 53%;
       }
 
       #text3 {
@@ -663,7 +663,7 @@
       }
 
       #arrow2 {
-        top: 60%;
+        top: 61%;
       }
 
       #arrow3 {
@@ -1004,7 +1004,41 @@
         <block type="blinkLed"></block>
         <block type="askForAnotherRound"></block>
         <block type="mainSetup"></block>
-        <block type="mainLoop"></block>
+        <block type="mainLoop">
+          <value name="correctFeedbackSequence">
+            <block type="useblinkallleds">
+              <value name="blinkAllLedsTimes">
+                <block type="math_number">
+                  <field name="NUM">3</field>
+                </block>
+              </value>
+              <value name="blinkAllLedsDuration">
+                <block type="math_number">
+                  <field name="NUM">500</field>
+                </block>
+              </value>
+            </block>
+          </value>
+          <value name="wrongFeedbackSequence">
+            <block type="useblinkled">
+              <value name="blinkLedLed">
+                <block type="math_number">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+              <value name="blinkLedTimes">
+                <block type="math_number">
+                  <field name="NUM">5</field>
+                </block>
+              </value>
+              <value name="blinkLedDuration">
+                <block type="math_number">
+                  <field name="NUM">500</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
         <block type="useblinkled">
           <value name="blinkLedLed">
             <block type="math_number">
@@ -1053,9 +1087,71 @@
         <block type="showLedSequence"></block>
         <block type="blinkAllLeds"></block>
         <block type="blinkLed"></block>
-        <block type="waitForUserResponse"></block>
         <block type="mainSetup2"></block>
-        <block type="mainLoop2"></block>
+        <block type="mainLoop2">
+          <value name="correctFeedbackSequence">
+            <block type="useblinkallleds">
+              <value name="blinkAllLedsTimes">
+                <block type="math_number">
+                  <field name="NUM">3</field>
+                </block>
+              </value>
+              <value name="blinkAllLedsDuration">
+                <block type="math_number">
+                  <field name="NUM">500</field>
+                </block>
+              </value>
+            </block>
+          </value>
+          <value name="wrongFeedbackSequence">
+            <block type="useblinkled">
+              <value name="blinkLedLed">
+                <block type="math_number">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+              <value name="blinkLedTimes">
+                <block type="math_number">
+                  <field name="NUM">5</field>
+                </block>
+              </value>
+              <value name="blinkLedDuration">
+                <block type="math_number">
+                  <field name="NUM">500</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="useblinkled">
+          <value name="blinkLedLed">
+            <block type="math_number">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+          <value name="blinkLedTimes">
+            <block type="math_number">
+              <field name="NUM">5</field>
+            </block>
+          </value>
+          <value name="blinkLedDuration">
+            <block type="math_number">
+              <field name="NUM">500</field>
+            </block>
+          </value>
+        </block>
+        <block type="useblinkallleds">
+          <value name="blinkAllLedsTimes">
+            <block type="math_number">
+              <field name="NUM">3</field>
+            </block>
+          </value>
+          <value name="blinkAllLedsDuration">
+            <block type="math_number">
+              <field name="NUM">500</field>
+            </block>
+          </value>
+        </block>
       </category>
     </xml>
 
@@ -1108,9 +1204,7 @@
       <div id="text1" class="textContainer">
         Find the block which programs the sequence length!
       </div>
-      <div id="text2" class="textContainer">
-        Type the number like this:
-      </div>
+      <div id="text2" class="textContainer">Type the number like this:</div>
       <div id="text3" class="textContainer">
         How many lights can you remember?
       </div>
@@ -1119,7 +1213,7 @@
       <div
         class="instructionimage"
         style="
-          background-image: url('MemoryGame2.png');
+          background-image: url('MemoryGame1.png');
           background-size: cover;
           background-repeat: no-repeat;
         "
@@ -1152,15 +1246,21 @@
       "
     >
       <div class="grid"></div>
-      <div id="text1" class="textContainer">Find which block programs the sequence speed!</div>
-      <div id="text2" class="textContainer">Enter your wanted LED-speed like this:</div>
-      <div id="text3" class="textContainer">Remember, the time is in milliseconds, so 500ms = 0.5 second!</div>
+      <div id="text1" class="textContainer">
+        Find which block programs the sequence speed!
+      </div>
+      <div id="text2" class="textContainer">
+        Enter your wanted LED-speed like this:
+      </div>
+      <div id="text3" class="textContainer">
+        Remember, the time is in milliseconds, so 500ms = 0.5 second!
+      </div>
       <div id="arrow1" class="arrowContainer"></div>
       <div id="arrow2" class="arrowContainer"></div>
       <div
         class="instructionimage"
         style="
-          background-image: url('MemoryGame2.png');
+          background-image: url('MemoryGame1.png');
           background-size: cover;
           background-repeat: no-repeat;
         "
@@ -1193,22 +1293,29 @@
       "
     >
       <div class="grid"></div>
-      <div id="text1" class="textContainer">Text 1</div>
-      <div id="text2" class="textContainer">Text 2</div>
+      <div id="text1" class="textContainer">
+        Find the block which programs the Feedback Sequence!
+      </div>
+      <div id="text2" class="textContainer">
+        Change the blocks inside to whatever you like!
+      </div>
+      <div id="text3" class="textContainer">
+        Do you like one, or many lights?
+      </div>
       <div id="arrow1" class="arrowContainer"></div>
       <div id="arrow2" class="arrowContainer"></div>
       <div
-        class="bluecontainer"
+        class="instructionimage"
         style="
-          background-image: url('blocks.jpg');
+          background-image: url('croppedMemoryGame1.png');
           background-size: cover;
           background-repeat: no-repeat;
         "
       ></div>
       <div
-        class="pinkcontainer"
+        class="instructiongif"
         style="
-          background-image: url('blocksgif.gif');
+          background-image: url('croppedFeedbackSequenceGIF.gif');
           background-size: cover;
           background-repeat: no-repeat;
         "
