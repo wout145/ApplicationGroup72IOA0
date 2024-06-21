@@ -1335,7 +1335,7 @@
       let score = 0;
       let highScore = 0;
       let isTimerRunning = false;
-      let remainingTime = 10;
+      let remainingTime = 180;
       let isIconClicked = false;
 
       function timerClick() {
@@ -1344,7 +1344,7 @@
 
         if (!isTimerRunning) {
           if (remainingTime <= 0) {
-            remainingTime = 10;
+            remainingTime = 180;
           }
 
           timerInterval = setInterval(() => {
@@ -1363,7 +1363,7 @@
                 timerButton.disabled = true;
                 isIconClicked = false;
               } else {
-                remainingTime = 10;
+                remainingTime = 180;
                 timerClick();
               }
               claimIcon.addEventListener("click", scoreClaimed);
@@ -1390,7 +1390,7 @@
         timerButton.disabled = false;
         block_dragged = false;
         // Reset and restart the timer
-        remainingTime = 10;
+        remainingTime = 180;
         timerClick();
       }
 
@@ -1399,7 +1399,7 @@
 
         clearInterval(timerInterval);
         isTimerRunning = false;
-        remainingTime = 10;
+        remainingTime = 180;
         const timerButton = document.getElementById("timerButton");
         const currentScore = document.getElementById("CurrentScore");
         const highScore = document.getElementById("HighScore");
